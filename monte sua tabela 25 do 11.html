@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TabeLaLa - Monte sua tabela com @studies_lala</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Indie+Flower&family=Pacifico&family=Quicksand&family=Dancing+Script&family=Architects+Daughter&family=Shadows+Into+Light&family=Roboto:wght@400;700&family=Verdana:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        :root {
+            /* Cores */
+            --cor-fundo-pagina: #F5EBFF;
+            --cor-fundo-tabela: #F8F2FF;
+            --cor-divisorias: #4B0082;
+            --cor-letras: #4A2568;
+            --cor-cabecalho: #9370DB;
+            --cor-letras-cabecalho: #FFFFFF;
+            --cor-titulo: #4A2568;
+            --cor-assinatura: #9370DB;
+            --fonte-tabela: 'Comic Neue', cursive;
+            
+            --site-header-bg: #9370DB; 
+            --site-header-text: #FFFFFF;
+            --site-btn-bg: #9370DB;
+        }
+        
+        * { box-sizing: border-box; transition: all 0.3s ease; }
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--cor-fundo-pagina);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden; 
+            overflow-y: auto; 
+        }
+
+        /* HEADER SUPERIOR */
+        .site-header {
+            background-color: var(--site-header-bg);
+            color: var(--site-header-text);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 30;
+            position: sticky;
+            top: 0;
+        }
+
+        .site-header h1 {
+            font-family: 'Verdana', sans-serif;
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* LAYOUT PRINCIPAL */
+        .main-layout {
+            display: flex;
+            flex-direction: row; /* Barra Lateral e Conteúdo */
+            align-items: flex-start;
+            position: relative;
+            width: 100%;
+            height: auto; /* Altura automática para permitir scroll da página */
+        }
+
+        /* MENU LATERAL (SIDEBAR) - Sticky */
+        .sidebar-container {
+            width: 340px;
+            background-color: white;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+            
+            /* Fica fixo enquanto a página rola */
+            position: sticky;
+            top: 60px; /* Abaixo do header */
+            height: calc(100vh - 60px); /* Ocupa a altura da janela */
+            overflow-y: auto;
+            z-index: 20;
+            transition: margin-left 0.4s ease;
+        }
+
+        .sidebar-container.collapsed {
+            margin-left: -340px;
+        }
+
+        /* ÁREA DE CONTEÚDO */
+        .content-area {
+            flex: 1;
+            min-width: 0; /* Impede que a tabela estoure o flexbox */
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--cor-fundo-pagina);
+            /* Sem altura fixa, cresce com a tabela */
+        }
+
+        /* ROLAGEM DA TABELA */
+        .table-wrapper {
+            width: 100%;
+            /* Apenas rolagem horizontal (Leste-Oeste) */
+            overflow-x: auto; 
+            margin-bottom: 5px;
+            padding-bottom: 10px; /* Espaço para a barra de rolagem */
+            position: relative;
+        }
+
+        /* Estilo da barra de rolagem da tabela */
+        .table-wrapper::-webkit-scrollbar { height: 12px; }
+        .table-wrapper::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .table-wrapper::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; border: 3px solid #f1f1f1; }
+        .table-wrapper::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        table { 
+            border-collapse: collapse; 
+            background: var(--cor-fundo-tabela); 
+            border: 1px solid var(--cor-divisorias); 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
+            margin: 0 auto; 
+            max-width: none; /* Permite que a tabela seja maior que a tela */
+        }
+        
+        th, td { 
+            border: 1px solid var(--cor-divisorias); 
+            padding: 12px 15px; 
+            text-align: center; 
+            color: var(--cor-letras); 
+            font-family: var(--fonte-tabela); 
+            min-width: 120px; 
+            font-size: 16px; 
+            position: relative;
+            white-space: nowrap; 
+        }
+
+        th { background-color: var(--cor-cabecalho); color: var(--cor-letras-cabecalho); text-transform: uppercase; font-weight: 700; }
+        .special-header td.col-first { background-color: var(--cor-cabecalho); color: var(--cor-letras-cabecalho); text-transform: uppercase; font-weight: 700; }
+        tr:hover td:not(.col-first) { background-color: #e0ccff; }
+
+        /* PAINEL DE AÇÕES */
+        .actions-panel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 900px;
+            padding-bottom: 60px;
+        }
+
+        /* Botões */
+        .btn-toggle-sidebar {
+            background: transparent;
+            border: 2px solid var(--cor-titulo);
+            color: var(--cor-titulo);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-toggle-sidebar:hover { background-color: #f0e6ff; }
+
+        .btn-show-sidebar {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            background-color: var(--site-btn-bg);
+            color: var(--site-header-text);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 25;
+            font-size: 20px;
+        }
+        .btn-show-sidebar:hover { transform: scale(1.1); }
+
+        .btn-action { background-color: var(--site-btn-bg); color: var(--site-header-text); border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px; min-width: 140px; justify-content: center; }
+        .btn-action:hover { filter: brightness(0.9); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .btn-action.wide { width: 100%; max-width: 300px; margin-top: 10px; }
+
+        /* Estilos do Menu Lateral */
+        .section-title { font-size: 1.1rem; color: var(--cor-divisorias); border-bottom: 2px solid var(--cor-divisorias); padding-bottom: 5px; margin: 15px 0 10px; font-weight: bold; }
+        .presets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .preset-btn { padding: 8px; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9; cursor: pointer; font-size: 0.8rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .preset-btn:hover { border-color: var(--cor-cabecalho); background-color: #f0e6ff; }
+        .control-group { margin-bottom: 12px; }
+        .control-group label { display: block; margin-bottom: 4px; font-size: 0.9rem; font-weight: bold; color: #555; }
+        .color-input-container { display: flex; align-items: center; gap: 8px; cursor: pointer; border: 1px solid #eee; padding: 5px; border-radius: 4px; }
+        .color-picker-icon { font-size: 20px; color: #555; }
+        .color-display { display: flex; align-items: center; flex: 1; justify-content: space-between; }
+        .color-code { font-family: monospace; font-size: 12px; color: #666; }
+        .color-preview { width: 18px; height: 18px; border: 1px solid #ccc; border-radius: 3px; }
+        .color-input { position: absolute; opacity: 0; pointer-events: none; }
+        select { width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; }
+        .checkbox-group { display: flex; align-items: center; margin-bottom: 8px; font-size: 0.9rem; }
+        .checkbox-group input { margin-right: 8px; }
+        .checkbox-group input:disabled + label { color: #aaa; text-decoration: line-through; }
+
+        /* Responsividade Mobile */
+        @media (max-width: 900px) {
+            .main-layout { flex-direction: column; }
+            .sidebar-container { 
+                width: 100%; 
+                height: auto; 
+                max-height: 50vh; 
+                position: relative; 
+                top: 0;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
+            .sidebar-container.collapsed { display: none; margin-left: 0; }
+            .content-area { padding: 20px; }
+            .btn-show-sidebar { position: fixed; top: 75px; left: 10px; }
+        }
+
+        /* MODO IMPRESSÃO (Focus Mode) */
+        .print-mode .site-header, 
+        .print-mode .sidebar-container, 
+        .print-mode .btn-show-sidebar, 
+        .print-mode .actions-panel, 
+        .print-mode .chat-icon-container { 
+            display: none !important; 
+        }
+        .print-mode .content-area { 
+            padding: 40px 20px; 
+            justify-content: flex-start; 
+            background-color: var(--cor-fundo-pagina); 
+            width: 100%; 
+            height: 100vh; 
+            align-items: center;
+        }
+        .print-mode .table-wrapper { 
+            overflow-x: auto; 
+            max-width: 95vw;
+        }
+        .print-mode .btn-back, .print-mode .btn-info { display: inline-flex; }
+        
+        .btn-back, .btn-info { position: fixed; bottom: 20px; display: none; z-index: 1000; border: none; padding: 12px; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; }
+        .btn-back { left: 20px; background-color: var(--site-btn-bg); }
+        .btn-info { right: 20px; background-color: #17a2b8; }
+
+        /* MERGE */
+        .merge-overlay { position: absolute; display: none; justify-content: center; align-items: center; z-index: 100; width: 120px; height: 120px; pointer-events: none; }
+        .merge-grid { display: grid; grid-template-columns: 36px 36px 36px; grid-template-rows: 36px 36px 36px; gap: 2px; pointer-events: auto; }
+        .merge-btn { background-color: var(--cor-divisorias); color: white; border: 2px solid white; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 3px 8px rgba(0,0,0,0.4); transition: transform 0.2s; width: 34px; height: 34px; }
+        .merge-btn:hover { transform: scale(1.15); background-color: var(--cor-titulo); }
+        .merge-btn.up { grid-column: 2; grid-row: 1; }
+        .merge-btn.left { grid-column: 1; grid-row: 2; }
+        .merge-btn.right { grid-column: 3; grid-row: 2; }
+        .merge-btn.down { grid-column: 2; grid-row: 3; }
+
+        /* MODAL E INSTRUÇÕES */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+        .modal-content { background-color: white; padding: 30px; border-radius: 10px; width: 100%; max-width: 800px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center; max-height: 90vh; overflow-y: auto; }
+        .modal h2 { color: var(--cor-divisorias); margin-bottom: 20px; font-family: 'Indie Flower', cursive; }
+        .modal textarea { width: 100%; height: 120px; padding: 12px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 20px; font-family: Arial, sans-serif; resize: none; }
+        .modal-actions { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        
+        .modal-btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .modal-btn-primary { background-color: #1DA1F2; color: white; }
+        .modal-btn-secondary { background-color: #6c757d; color: white; }
+
+        .preview-container { margin: 20px 0; border: 1px solid #ddd; border-radius: 8px; padding: 15px; background-color: #f9f9f9; display: flex; flex-direction: column; align-items: center; }
+        .preview-title { font-weight: bold; margin-bottom: 10px; color: #333; text-align: center; }
+        .preview-image-container { max-width: 100%; overflow: auto; display: flex; justify-content: center; }
+        .preview-image { max-width: 100%; border: 1px solid #ddd; border-radius: 4px; }
+        
+        .instructions { background-color: #f0f8ff; border-left: 4px solid #1DA1F2; padding: 15px; margin: 20px 0; text-align: left; border-radius: 4px; }
+        .instructions h3 { margin-top: 0; color: #1DA1F2; }
+        .instructions ol { padding-left: 20px; margin: 0; }
+        .instructions li { margin-bottom: 10px; }
+
+        .custom-title { text-align: center; color: var(--cor-titulo); text-transform: uppercase; margin-bottom: 15px; font-family: 'Indie Flower', cursive; font-weight: 700; font-size: 2.5em; width: 100%; outline: none; }
+        .custom-footer { text-align: center; color: var(--cor-assinatura); font-weight: 400; font-family: 'Indie Flower', cursive; margin-top: 10px; width: 100%; outline: none; font-size: 1.2em; }
+
+        .info-box { position: fixed; bottom: 70px; right: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; max-width: 300px; display: none; }
+        .info-box.show { display: block; }
+        .chat-icon-container { position: fixed; bottom: 20px; right: 20px; z-index: 1010; cursor: pointer; }
+        .chat-icon { width: 60px; height: 60px; background-color: var(--site-btn-bg); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .notification-badge { position: absolute; top: -5px; right: -5px; width: 22px; height: 22px; background-color: red; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border: 2px solid white; }
+        .notification-badge.visible { display: flex; }
+        .vibrating { animation: vibrate 1s ease-out infinite; }
+        @keyframes vibrate { 0%, 30%, 100% { transform: translate(0, 0) rotate(0); } 5% { transform: translate(-2px, -2px) rotate(-2deg); } 10% { transform: translate(2px, 2px) rotate(2deg); } 15% { transform: translate(-2px, 2px) rotate(-2deg); } 20% { transform: translate(2px, -2px) rotate(2deg); } 25% { transform: translate(0, 0) rotate(0); } }
+        .chat-box { position: fixed; bottom: 100px; right: 20px; width: 350px; max-width: 90vw; background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; z-index: 1009; opacity: 0; transform: scale(0.9) translateY(10px); transform-origin: bottom right; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; }
+        .chat-box.show { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+        .chat-header { background-color: var(--site-btn-bg); color: white; padding: 15px; font-weight: bold; }
+        .chat-messages { padding: 15px; height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .message { padding: 10px 15px; border-radius: 18px; max-width: 80%; line-height: 1.4; word-wrap: break-word; }
+        .message.bot { background-color: #f1f0f0; border-bottom-left-radius: 4px; align-self: flex-start; }
+        .message.user { background-color: #e0ccff; color: #333; border-bottom-right-radius: 4px; align-self: flex-end; }
+        .chat-replies { padding: 15px; border-top: 1px solid #eee; display: flex; flex-direction: column; gap: 8px; }
+        .chat-reply-btn { background: #f9f9f9; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; text-align: left; }
+        .chat-reply-btn:hover { background-color: #f0e6ff; border-color: var(--site-btn-bg); }
+        .loading { display: none; text-align: center; padding: 20px; }
+        .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid #1DA1F2; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    
+    <header class="site-header">
+        <h1>TabeLaLa - Monte sua tabela com @studies_lala</h1>
+    </header>
+
+    <div class="main-layout">
+        
+        <div class="sidebar-container" id="sidebar">
+            <button class="btn-toggle-sidebar" onclick="toggleSidebar()">
+                <i class="fas fa-chevron-left"></i> Ocultar Menu
+            </button>
+
+            <div class="section-title">Temas Prontos</div>
+            <div class="presets-grid">
+                <button class="preset-btn" onclick="applyPreset('doceLavanda')"><i class="fas fa-heart"></i> LaLa</button>
+                <button class="preset-btn" onclick="applyPreset('florestaEncantada')"><i class="fas fa-atom"></i> Marie Curie</button>
+                <button class="preset-btn" onclick="applyPreset('cadernoClassico')"><i class="fas fa-ankh"></i> Cleópatra</button>
+                <button class="preset-btn" onclick="applyPreset('brisaDoMar')"><i class="fas fa-book-reader"></i> Carolina M. Jesus</button>
+                <button class="preset-btn" onclick="applyPreset('cinzaMinimalista')"><i class="fas fa-laptop-code"></i> Ada Lovelace</button>
+                <button class="preset-btn" onclick="applyPreset('ceuEstrelado')"><i class="fas fa-graduation-cap"></i> Anna J. Cooper</button>
+                <button class="preset-btn" onclick="applyPreset('jardimSecreto')"><i class="fas fa-shoe-prints"></i> Ana Botafogo</button>
+                <button class="preset-btn" onclick="applyPreset('oceanoProfundo')"><i class="fas fa-pen-nib"></i> C. Lispector</button>
+                <button class="preset-btn" onclick="applyPreset('terracotaSol')"><i class="fas fa-brain"></i> Nise da Silveira</button>
+                <button class="preset-btn" onclick="applyPreset('grafiteAmarelo')"><i class="fas fa-bus"></i> Rosa Parks</button>
+                <button class="preset-btn" onclick="applyPreset('rosaCereja')"><i class="fas fa-book"></i> Malala Y.</button>
+                <button class="preset-btn" onclick="applyPreset('docePastel')"><i class="fas fa-venus-mars"></i> C. Jorgensen</button>
+                <button class="preset-btn" onclick="applyPreset('mentaSuave')"><i class="fas fa-feather-alt"></i> Jane Austen</button>
+            </div>
+
+            <div class="section-title">Configurações de Cores</div>
+            <div class="control-group"><label>Fundo da Página</label><div class="color-input-container" onclick="document.getElementById('bgPage').click()"><i class="fas fa-palette color-picker-icon"></i><div class="color-display"><span class="color-code" id="bgPageCode">#F5EBFF</span><div class="color-preview" id="bgPagePreview" style="background-color: #F5EBFF"></div></div><input type="color" id="bgPage" value="#F5EBFF" onchange="updateColorDisplay(this)" class="color-input"></div></div>
+            <div class="control-group"><label>Fundo das Células</label><div class="color-input-container" onclick="document.getElementById('bgCells').click()"><i class="fas fa-palette color-picker-icon"></i><div class="color-display"><span class="color-code" id="bgCellsCode">#F8F2FF</span><div class="color-preview" id="bgCellsPreview" style="background-color: #F8F2FF"></div></div><input type="color" id="bgCells" value="#F8F2FF" onchange="updateColorDisplay(this)" class="color-input"></div></div>
+            <div class="control-group"><label>Cor das Divisórias</label><div class="color-input-container" onclick="document.getElementById('borderColor').click()"><i class="fas fa-palette color-picker-icon"></i><div class="color-display"><span class="color-code" id="borderColorCode">#4B0082</span><div class="color-preview" id="borderColorPreview" style="background-color: #4B0082"></div></div><input type="color" id="borderColor" value="#4B0082" onchange="updateColorDisplay(this)" class="color-input"></div></div>
+            <div class="control-group"><label>Cor das Letras</label><div class="color-input-container" onclick="document.getElementById('textColor').click()"><i class="fas fa-palette color-picker-icon"></i><div class="color-display"><span class="color-code" id="textColorCode">#4A2568</span><div class="color-preview" id="textColorPreview" style="background-color: #4A2568"></div></div><input type="color" id="textColor" value="#4A2568" onchange="updateColorDisplay(this)" class="color-input"></div></div>
+            <div class="control-group"><label>Cor do Título</label><div class="color-input-container" onclick="document.getElementById('titleColor').click()"><i class="fas fa-palette color-picker-icon"></i><div class="color-display"><span class="color-code" id="titleColorCode">#4A2568</span><div class="color-preview" id="titleColorPreview" style="background-color: #4A2568"></div></div><input type="color" id="titleColor" value="#4A2568" onchange="updateColorDisplay(this)" class="color-input"></div></div>
+            <div class="control-group"><label>Cor da Assinatura</label><div class="color-input-container" onclick="document.getElementById('footerColor').click()"><i class="fas fa-palette color-picker-icon"></i><div class="color-display"><span class="color-code" id="footerColorCode">#9370DB</span><div class="color-preview" id="footerColorPreview" style="background-color: #9370DB"></div></div><input type="color" id="footerColor" value="#9370DB" onchange="updateColorDisplay(this)" class="color-input"></div></div>
+            <div class="control-group"><label>Cor do Cabeçalho</label><div class="color-input-container" onclick="document.getElementById('headerBgColor').click()"><i class="fas fa-palette color-picker-icon"></i><div class="color-display"><span class="color-code" id="headerBgColorCode">#9370DB</span><div class="color-preview" id="headerBgColorPreview" style="background-color: #9370DB"></div></div><input type="color" id="headerBgColor" value="#9370DB" onchange="updateColorDisplay(this)" class="color-input"></div></div>
+            <div class="control-group"><label>Texto do Cabeçalho</label><div class="color-input-container" onclick="document.getElementById('headerTextColor').click()"><i class="fas fa-palette color-picker-icon"></i><div class="color-display"><span class="color-code" id="headerTextColorCode">#FFFFFF</span><div class="color-preview" id="headerTextColorPreview" style="background-color: #FFFFFF"></div></div><input type="color" id="headerTextColor" value="#FFFFFF" onchange="updateColorDisplay(this)" class="color-input"></div></div>
+
+            <div class="section-title">Estilo e Fonte</div>
+            <div class="control-group"><select id="fontFamily" onchange="applyStyles()"><option value="'Comic Neue', cursive" selected>Comic Neue</option><option value="'Indie Flower', cursive">Indie Flower</option><option value="'Pacifico', cursive">Pacifico</option><option value="'Quicksand', sans-serif">Quicksand</option><option value="'Dancing Script', cursive">Dancing Script</option><option value="'Architects Daughter', cursive">Architects Daughter</option><option value="'Shadows Into Light', cursive">Shadows Into Light</option><option value="Arial, sans-serif">Arial</option><option value="Georgia, serif">Georgia</option><option value="Verdana, sans-serif">Verdana</option><option value="'Trebuchet MS', sans-serif">Trebuchet MS</option><option value="'Courier New', monospace">Courier New</option></select></div>
+            <div class="checkbox-group"><input type="checkbox" id="hasTitle" checked onchange="toggleTitle()"><label for="hasTitle">Mostrar Título</label></div>
+            <div class="checkbox-group"><input type="checkbox" id="hasFooter" checked onchange="toggleFooter()"><label for="hasFooter">Mostrar Assinatura</label></div>
+            <div class="checkbox-group"><input type="checkbox" id="stripedRows" checked onchange="toggleStripedOptions()"><label for="stripedRows">Tons Intercalados</label></div>
+            <div id="stripedColorGroup" style="display: none; margin-top: 10px;">
+                <div class="control-group"><div class="color-input-container" onclick="document.getElementById('stripedColor').click()"><i class="fas fa-palette color-picker-icon"></i><div class="color-display"><span class="color-code" id="stripedColorCode">#e6d6ff</span><div class="color-preview" id="stripedColorPreview" style="background-color: #e6d6ff"></div></div><input type="color" id="stripedColor" value="#e6d6ff" onchange="updateColorDisplay(this)" class="color-input"></div></div>
+            </div>
+        </div>
+
+        <!-- ÁREA DE CONTEÚDO (DIREITA) -->
+        <div class="content-area">
+            
+            <!-- BOTÃO FLUTUANTE PARA MOSTRAR MENU -->
+            <button id="showMenuBtn" class="btn-show-sidebar" onclick="toggleSidebar()" title="Mostrar Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div id="customTitle" class="custom-title" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Sua Tabela</div>
+            
+            <div class="table-wrapper" id="tableWrapper">
+                <table id="editableTable" class="special-header striped-rows">
+                    <thead><tr><th class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 1</th><th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 2</th><th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 3</th><th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 4</th><th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 5</th></tr></thead>
+                    <tbody><tr><td class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 1 Col 1</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 1 Col 2</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 1 Col 3</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 1 Col 4</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 1 Col 5</td></tr><tr><td class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 2 Col 1</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 2 Col 2</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 2 Col 3</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 2 Col 4</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 2 Col 5</td></tr><tr><td class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 3 Col 1</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 3 Col 2</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 3 Col 3</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 3 Col 4</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 3 Col 5</td></tr></tbody>
+                </table>
+                <div id="mergeOverlay" class="merge-overlay">
+                    <div class="merge-grid">
+                        <div class="merge-btn up" onclick="executeMerge('up')"><i class="fas fa-arrow-up"></i></div>
+                        <div class="merge-btn left" onclick="executeMerge('left')"><i class="fas fa-arrow-left"></i></div>
+                        <div class="merge-btn right" onclick="executeMerge('right')"><i class="fas fa-arrow-right"></i></div>
+                        <div class="merge-btn down" onclick="executeMerge('down')"><i class="fas fa-arrow-down"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="customFooter" class="custom-footer" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">@studies_lala</div>
+
+            <div class="actions-panel">
+                <button class="btn-action" onclick="addRow()"><i class="fas fa-plus"></i> Adicionar Linha</button>
+                <button class="btn-action" onclick="addColumn()"><i class="fas fa-plus"></i> Adicionar Coluna</button>
+                <button class="btn-action" onclick="removeRow()"><i class="fas fa-minus"></i> Remover Linha</button>
+                <button class="btn-action" onclick="removeColumn()"><i class="fas fa-minus"></i> Remover Coluna</button>
+                <button class="btn-action" onclick="togglePrintMode()"><i class="fas fa-camera"></i> Hora do Print</button>
+                <button class="btn-action wide" onclick="openShareModal()"><i class="fab fa-twitter"></i> Compartilhar no X</button>
+            </div>
+        </div>
+    </div>
+    
+    <button class="btn-back" id="backButton" onclick="togglePrintMode()"><i class="fas fa-arrow-left"></i> Voltar</button>
+    <button class="btn-info" id="infoButton" onclick="toggleInfo()"><i class="fas fa-info-circle"></i></button>
+
+    <div class="info-box" id="infoBox">
+        <p><strong>Para tirar um print pelo computador:</strong></p>
+        <p>Pressione: <kbd>Windows + Shift + S</kbd> e selecione a área desejada.</p>
+        <p><strong>Dica Extra:</strong> Segure o clique em uma célula para mesclar!</p>
+    </div>
+
+    <!-- Modal para compartilhar no X -->
+    <div id="shareModal" class="modal">
+        <div class="modal-content">
+            <h2>Compartilhar sua Tabela no X</h2>
+            
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>Gerando imagem da sua tabela...</p>
+            </div>
+            
+            <div id="shareContent" style="display: none;">
+                <div class="preview-container">
+                    <div class="preview-title">Prévia da sua tabela:</div>
+                    <div class="preview-image-container">
+                        <img id="tablePreview" class="preview-image" alt="Prévia da tabela">
+                    </div>
+                </div>
+                
+                <div class="instructions">
+                    <h3>Como compartilhar sua tabela no X:</h3>
+                    <ol>
+                        <li>Clique em "Copiar Texto" para copiar a mensagem</li>
+                        <li>Clique em "Baixar Imagem" para salvar a tabela</li>
+                        <li>Abra o X (Twitter) e crie um novo post</li>
+                        <li>Cole o texto (Ctrl+V) e faça upload da imagem</li>
+                        <li>Ou clique em "Abrir X" para ir diretamente</li>
+                    </ol>
+                </div>
+                
+                <p>Texto para compartilhar:</p>
+                <textarea id="tweetText">Minha tabela personalizada! ✨ Fiz usando o site da @studies_lala: https://priprincesa26.github.io/fa-asuatabela/</textarea>
+                
+                <div class="modal-actions">
+                    <button class="modal-btn modal-btn-primary" onclick="copyText()">
+                        <i class="fas fa-copy"></i> Copiar Texto
+                    </button>
+                    <button class="modal-btn modal-btn-primary" onclick="downloadImage()">
+                        <i class="fas fa-download"></i> Baixar Imagem
+                    </button>
+                    <button class="modal-btn modal-btn-primary" onclick="openTwitter()">
+                        <i class="fab fa-twitter"></i> Abrir X
+                    </button>
+                    <button class="modal-btn modal-btn-secondary" onclick="closeShareModal()">
+                        <i class="fas fa-times"></i> Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-icon-container" id="chatIconContainer" onclick="toggleChat()">
+        <div class="chat-icon"><i class="fas fa-comments"></i></div>
+        <div class="notification-badge" id="chatNotification">1</div>
+    </div>
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">A LaLa do twitter</div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-replies" id="chatReplies"></div>
+    </div>
+
+    <script>
+        const presets = {
+            doceLavanda: { bgPage: '#F5EBFF', bgCells: '#F8F2FF', borderColor: '#4B0082', textColor: '#4A2568', titleColor: '#4A2568', footerColor: '#9370DB', headerBgColor: '#9370DB', headerTextColor: '#FFFFFF', stripedColor: '#e6d6ff', fontFamily: "'Comic Neue', cursive" },
+            florestaEncantada: { bgPage: '#f0fff0', bgCells: '#fafffa', borderColor: '#006400', textColor: '#2f4f4f', titleColor: '#2e8b57', footerColor: '#2e8b57', headerBgColor: '#2e8b57', headerTextColor: '#ffffff', stripedColor: '#E8F5E9', fontFamily: "'Architects Daughter', cursive" },
+            cadernoClassico: { bgPage: '#fdf5e6', bgCells: '#fffaf0', borderColor: '#8b4513', textColor: '#696969', titleColor: '#8b4513', footerColor: '#a0522d', headerBgColor: '#d2b48c', headerTextColor: '#4d3a24', stripedColor: '#F5F5DC', fontFamily: "'Georgia', serif" },
+            brisaDoMar: { bgPage: '#e0f7fa', bgCells: '#ffffff', borderColor: '#0077c2', textColor: '#004d7a', titleColor: '#0288d1', footerColor: '#0288d1', headerBgColor: '#4fc3f7', headerTextColor: '#ffffff', stripedColor: '#E1F5FE', fontFamily: "'Quicksand', sans-serif" },
+            cinzaMinimalista: { bgPage: '#f5f5f5', bgCells: '#ffffff', borderColor: '#616161', textColor: '#212121', titleColor: '#424242', footerColor: '#757575', headerBgColor: '#bdbdbd', headerTextColor: '#000000', stripedColor: '#EEEEEE', fontFamily: "'Arial', sans-serif" },
+            ceuEstrelado: { bgPage: '#0d1b2a', bgCells: '#1b263b', borderColor: '#778da9', textColor: '#e0e1dd', titleColor: '#ffffff', footerColor: '#778da9', headerBgColor: '#415a77', headerTextColor: '#ffffff', stripedColor: '#2a3f5d', fontFamily: "'Quicksand', sans-serif" },
+            jardimSecreto: { bgPage: '#f0fff4', bgCells: '#e6f5e9', borderColor: '#2e8b57', textColor: '#2f4f4f', titleColor: '#3cb371', footerColor: '#3cb371', headerBgColor: '#66cdaa', headerTextColor: '#003311', stripedColor: '#D1FAE5', fontFamily: "'Dancing Script', cursive" },
+            oceanoProfundo: { bgPage: '#0a192f', bgCells: '#112240', borderColor: '#64ffda', textColor: '#ccd6f6', titleColor: '#ffffff', footerColor: '#64ffda', headerBgColor: '#173a5e', headerTextColor: '#64ffda', stripedColor: '#0f2d52', fontFamily: "'Courier New', monospace" },
+            terracotaSol: { bgPage: '#fffaf0', bgCells: '#fdf5e6', borderColor: '#c89f9c', textColor: '#7d5a5a', titleColor: '#a0522d', footerColor: '#a0522d', headerBgColor: '#e57373', headerTextColor: '#ffffff', stripedColor: '#FAEBD7', fontFamily: "'Georgia', serif" },
+            grafiteAmarelo: { bgPage: '#212121', bgCells: '#323232', borderColor: '#616161', textColor: '#f5f5f5', titleColor: '#ffd600', footerColor: '#f5f5f5', headerBgColor: '#ffd600', headerTextColor: '#000000', stripedColor: '#424242', fontFamily: "'Trebuchet MS', sans-serif" },
+            rosaCereja: { bgPage: '#FFF0F5', bgCells: '#FFFFFF', borderColor: '#C2185B', textColor: '#880E4F', titleColor: '#C2185B', footerColor: '#F48FB1', headerBgColor: '#F48FB1', headerTextColor: '#FFFFFF', stripedColor: '#FCE4EC', fontFamily: "'Indie Flower', cursive" },
+            docePastel: { bgPage: '#e0f7fa', bgCells: '#ffffff', borderColor: '#f48fb1', textColor: '#ad1457', titleColor: '#d81b60', footerColor: '#f48fb1', headerBgColor: '#f48fb1', headerTextColor: '#ffffff', stripedColor: '#fce4ec', fontFamily: "'Comic Neue', cursive" },
+            mentaSuave: { bgPage: '#f0fdf4', bgCells: '#ffffff', borderColor: '#4ade80', textColor: '#14532d', titleColor: '#16a34a', footerColor: '#16a34a', headerBgColor: '#86efac', headerTextColor: '#064e3b', stripedColor: '#dcfce7', fontFamily: "'Architects Daughter', cursive" },
+        };
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const btn = document.getElementById('showMenuBtn');
+            const toggleIcon = sidebar.querySelector('.btn-toggle-sidebar i');
+            
+            sidebar.classList.toggle('collapsed');
+            
+            if (sidebar.classList.contains('collapsed')) {
+                btn.style.display = 'flex';
+            } else {
+                btn.style.display = 'none';
+                if (window.innerWidth < 900) {
+                    toggleIcon.className = 'fas fa-chevron-up';
+                } else {
+                    toggleIcon.className = 'fas fa-chevron-left';
+                }
+            }
+        }
+
+        function applyPreset(presetName) {
+            const preset = presets[presetName];
+            if (!preset) return;
+            Object.keys(preset).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.value = preset[key];
+                    if (element.type === 'color') updateColorDisplay(element);
+                }
+            });
+            applyStyles();
+        }
+        function pasteTextOnly(event) { event.preventDefault(); const text = (event.clipboardData || window.clipboardData).getData('text/plain'); document.execCommand('insertText', false, text); }
+        function updateColorDisplay(input) { document.getElementById(input.id + 'Code').textContent = input.value; document.getElementById(input.id + 'Preview').style.backgroundColor = input.value; applyStyles(); }
+        
+        function toggleStripedOptions() {
+            const isChecked = document.getElementById('stripedRows').checked;
+            document.getElementById('stripedColorGroup').style.display = isChecked ? 'block' : 'none';
+            applyStyles();
+        }
+        
+        function applyStyles() {
+            document.documentElement.style.setProperty('--cor-fundo-pagina', document.getElementById('bgPage').value);
+            document.documentElement.style.setProperty('--cor-fundo-tabela', document.getElementById('bgCells').value);
+            document.documentElement.style.setProperty('--cor-divisorias', document.getElementById('borderColor').value);
+            document.documentElement.style.setProperty('--cor-letras', document.getElementById('textColor').value);
+            document.documentElement.style.setProperty('--cor-titulo', document.getElementById('titleColor').value);
+            document.documentElement.style.setProperty('--cor-assinatura', document.getElementById('footerColor').value);
+            
+            const headerBg = document.getElementById('headerBgColor').value;
+            const headerText = document.getElementById('headerTextColor').value;
+            document.documentElement.style.setProperty('--cor-cabecalho', headerBg);
+            document.documentElement.style.setProperty('--cor-letras-cabecalho', headerText);
+            document.documentElement.style.setProperty('--site-header-bg', headerBg);
+            document.documentElement.style.setProperty('--site-header-text', headerText);
+            document.documentElement.style.setProperty('--site-btn-bg', headerBg);
+            
+            const fontFamily = document.getElementById('fontFamily').value;
+            document.documentElement.style.setProperty('--fonte-tabela', fontFamily);
+            document.querySelectorAll('th, td, .custom-title, .custom-footer').forEach(element => { element.style.fontFamily = fontFamily; });
+            
+            const table = document.getElementById('editableTable');
+            const stripedRows = document.getElementById('stripedRows').checked;
+            const oldStyle = document.getElementById('custom-striped-style');
+            if (oldStyle) oldStyle.remove();
+
+            if (stripedRows) {
+                table.classList.add('striped-rows');
+                const stripedColor = document.getElementById('stripedColor').value;
+                const style = document.createElement('style');
+                style.id = 'custom-striped-style';
+                style.textContent = `.striped-rows tr:nth-child(even) td:not(.col-first) { background-color: ${stripedColor} !important; }`;
+                document.head.appendChild(style);
+            } else {
+                table.classList.remove('striped-rows');
+            }
+        }
+        function addRow() { const tbody = document.querySelector('#editableTable tbody'); const columns = document.querySelector('#editableTable thead tr').cells.length; const newRow = tbody.insertRow(); for (let i = 0; i < columns; i++) { const cell = newRow.insertCell(); cell.contentEditable = true; cell.spellcheck = false; cell.onpaste = pasteTextOnly; cell.style.fontFamily = document.getElementById('fontFamily').value; cell.textContent = (i === 0) ? `Nova Linha` : `Conteúdo`; } updateFirstColumnStyles(); applyStyles(); }
+        function addColumn() { const headerRow = document.querySelector('#editableTable thead tr'); const bodyRows = document.querySelectorAll('#editableTable tbody tr'); const newColIndex = headerRow.cells.length; const newHeaderCell = document.createElement('th'); newHeaderCell.contentEditable = true; newHeaderCell.spellcheck = false; newHeaderCell.onpaste = pasteTextOnly; newHeaderCell.style.fontFamily = document.getElementById('fontFamily').value; newHeaderCell.textContent = `Cabeçalho ${newColIndex+1}`; headerRow.appendChild(newHeaderCell); bodyRows.forEach(row => { const newCell = row.insertCell(); newCell.contentEditable = true; newCell.spellcheck = false; newCell.onpaste = pasteTextOnly; newCell.style.fontFamily = document.getElementById('fontFamily').value; newCell.textContent = `Conteúdo`; }); updateFirstColumnStyles(); applyStyles(); }
+        function removeRow() { const tbody = document.querySelector('#editableTable tbody'); if (tbody.rows.length > 1) { tbody.deleteRow(-1); } updateFirstColumnStyles(); }
+        function removeColumn() { const headerRow = document.querySelector('#editableTable thead tr'); if (headerRow.cells.length > 1) { const bodyRows = document.querySelectorAll('#editableTable tbody tr'); headerRow.deleteCell(-1); bodyRows.forEach(row => row.deleteCell(-1)); } updateFirstColumnStyles(); }
+        function toggleTitle() { document.getElementById('customTitle').style.display = document.getElementById('hasTitle').checked ? 'block' : 'none'; }
+        function toggleFooter() { document.getElementById('customFooter').style.display = document.getElementById('hasFooter').checked ? 'block' : 'none'; }
+        
+        function updateFirstColumnStyles() {
+            const grid = mapTableGrid();
+            const allCells = document.querySelectorAll('#editableTable td, #editableTable th');
+            allCells.forEach(cell => cell.classList.remove('col-first'));
+            for (let r = 0; r < grid.length; r++) {
+                if (grid[r][0] && grid[r][0].element) {
+                    grid[r][0].element.classList.add('col-first');
+                }
+            }
+        }
+
+        let longPressTimer;
+        let selectedMergeCell = null;
+        let isMergeMenuOpen = false;
+        let ignoreNextClick = false; 
+        const mergeOverlay = document.getElementById('mergeOverlay');
+        const table = document.getElementById('editableTable');
+        
+        function mapTableGrid() {
+            const grid = [];
+            const rows = table.rows;
+            for (let r = 0; r < rows.length; r++) { if (!grid[r]) grid[r] = []; }
+            for (let r = 0; r < rows.length; r++) {
+                const row = rows[r];
+                let colIndex = 0;
+                for (let c = 0; c < row.cells.length; c++) {
+                    const cell = row.cells[c];
+                    while (grid[r][colIndex]) colIndex++;
+                    const cellInfo = { element: cell, r: r, c: colIndex, rowSpan: cell.rowSpan, colSpan: cell.colSpan };
+                    for (let rs = 0; rs < cell.rowSpan; rs++) {
+                        for (let cs = 0; cs < cell.colSpan; cs++) {
+                            if (!grid[r + rs]) grid[r + rs] = [];
+                            grid[r + rs][colIndex + cs] = cellInfo;
+                        }
+                    }
+                    colIndex += cell.colSpan;
+                }
+            }
+            return grid;
+        }
+
+        table.addEventListener('mousedown', startLongPress);
+        table.addEventListener('touchstart', startLongPress);
+        document.addEventListener('mouseup', cancelLongPress);
+        document.addEventListener('touchend', cancelLongPress);
+        
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.merge-btn')) return;
+            if (ignoreNextClick) { ignoreNextClick = false; return; }
+            if (isMergeMenuOpen && !e.target.closest('#mergeOverlay')) hideMergeUI();
+        });
+
+        function startLongPress(e) {
+            const cell = e.target.closest('th, td');
+            if (!cell) return;
+            if (cell.parentElement.rowIndex === 0 && cell.cellIndex === 0) return;
+            longPressTimer = setTimeout(() => { showMergeUI(cell); ignoreNextClick = true; }, 500); 
+        }
+        function cancelLongPress() { clearTimeout(longPressTimer); }
+
+        function showMergeUI(cell) {
+            selectedMergeCell = cell;
+            isMergeMenuOpen = true;
+            const rect = cell.getBoundingClientRect();
+            const containerRect = document.querySelector('.table-wrapper').getBoundingClientRect();
+            const scrollLeft = document.querySelector('.table-wrapper').scrollLeft;
+            
+            const top = (rect.top - containerRect.top) + (rect.height / 2) - 60; 
+            const left = (rect.left - containerRect.left) + scrollLeft + (rect.width / 2) - 60; 
+            
+            mergeOverlay.style.top = `${top}px`;
+            mergeOverlay.style.left = `${left}px`;
+            mergeOverlay.style.display = 'flex';
+
+            const grid = mapTableGrid();
+            let currentGridCell = null;
+            for(let r=0; r<grid.length; r++) {
+                for(let c=0; c<grid[r].length; c++) {
+                    if (grid[r][c] && grid[r][c].element === cell) { currentGridCell = grid[r][c]; break; }
+                }
+                if (currentGridCell) break;
+            }
+            if (!currentGridCell) return;
+            const r = currentGridCell.r;
+            const c = currentGridCell.c;
+            const btnUp = mergeOverlay.querySelector('.up');
+            const btnDown = mergeOverlay.querySelector('.down');
+            const btnLeft = mergeOverlay.querySelector('.left');
+            const btnRight = mergeOverlay.querySelector('.right');
+            btnUp.style.visibility = 'visible'; btnDown.style.visibility = 'visible'; btnLeft.style.visibility = 'visible'; btnRight.style.visibility = 'visible';
+
+            if (r === 0 && c > 0) { const ln = grid[r][c-1]; if (ln && ln.r === 0 && ln.c === 0) btnLeft.style.visibility = 'hidden'; }
+            if (c === 0 && r > 0) { const un = grid[r-1][c]; if (un && un.r === 0 && un.c === 0) btnUp.style.visibility = 'hidden'; }
+            if (r === 0) { btnDown.style.visibility = 'hidden'; btnUp.style.visibility = 'hidden'; }
+            if (r === 1) btnUp.style.visibility = 'hidden';
+            if (c === 0) { btnRight.style.visibility = 'hidden'; btnLeft.style.visibility = 'hidden'; }
+            if (c === 1) btnLeft.style.visibility = 'hidden';
+        }
+
+        function hideMergeUI() { mergeOverlay.style.display = 'none'; selectedMergeCell = null; isMergeMenuOpen = false; }
+
+        function executeMerge(direction) {
+            if (!selectedMergeCell) return;
+            const stripedCheck = document.getElementById('stripedRows');
+            if (!stripedCheck.disabled) { stripedCheck.checked = false; stripedCheck.disabled = true; toggleStripedOptions(); }
+            const grid = mapTableGrid();
+            let cellInfo = null;
+            for(let r=0; r<grid.length; r++) { for(let c=0; c<grid[r].length; c++) { if (grid[r][c] && grid[r][c].element === selectedMergeCell) { cellInfo = grid[r][c]; break; } } if (cellInfo) break; }
+            if (!cellInfo) return;
+            let neighbor = null;
+            try {
+                if (direction === 'right') { const nc = cellInfo.c + cellInfo.colSpan; if (grid[cellInfo.r][nc]) { neighbor = grid[cellInfo.r][nc]; if (neighbor.r === cellInfo.r && neighbor.rowSpan === cellInfo.rowSpan) { selectedMergeCell.colSpan += neighbor.element.colSpan; neighbor.element.remove(); } } }
+                else if (direction === 'down') { const nr = cellInfo.r + cellInfo.rowSpan; if (grid[nr] && grid[nr][cellInfo.c]) { neighbor = grid[nr][cellInfo.c]; if (neighbor.c === cellInfo.c && neighbor.colSpan === cellInfo.colSpan) { selectedMergeCell.rowSpan += neighbor.element.rowSpan; neighbor.element.remove(); } } }
+                else if (direction === 'left') { const nc = cellInfo.c - 1; if (nc >= 0 && grid[cellInfo.r][nc]) { neighbor = grid[cellInfo.r][nc]; if (neighbor.r === cellInfo.r && neighbor.rowSpan === cellInfo.rowSpan) { neighbor.element.colSpan += selectedMergeCell.colSpan; selectedMergeCell.remove(); } } }
+                else if (direction === 'up') { const nr = cellInfo.r - 1; if (nr >= 0 && grid[nr][cellInfo.c]) { neighbor = grid[nr][cellInfo.c]; if (neighbor.c === cellInfo.c && neighbor.colSpan === cellInfo.colSpan) { neighbor.element.rowSpan += selectedMergeCell.rowSpan; selectedMergeCell.remove(); } } }
+            } catch (err) { console.error(err); }
+            hideMergeUI(); updateFirstColumnStyles(); applyStyles();
+        }
+
+        let tableImageDataUrl = '';
+        function togglePrintMode() { document.body.classList.toggle('print-mode'); }
+        function toggleInfo() { document.getElementById('infoBox').classList.toggle('show'); }
+
+        function openShareModal() {
+            const modal = document.getElementById('shareModal');
+            modal.style.display = 'flex';
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('shareContent').style.display = 'none';
+
+            captureTableImage().then(() => {
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('shareContent').style.display = 'block';
+                const title = document.getElementById('customTitle').innerText;
+                document.getElementById('tweetText').value = `Minha tabela "${title}"! ✨ Fiz usando o site da @studies_lala: https://priprincesa26.github.io/fa-asuatabela/`;
+            }).catch(err => { alert("Erro ao gerar imagem."); closeShareModal(); });
+        }
+
+        function captureTableImage() {
+            return new Promise((resolve, reject) => {
+                const titleEl = document.getElementById('customTitle');
+                const tableWrapperEl = document.getElementById('tableWrapper'); 
+                const footerEl = document.getElementById('customFooter');
+                const overlay = document.getElementById('mergeOverlay');
+                
+                const originalOverlayDisplay = overlay.style.display;
+                overlay.style.display = 'none';
+
+                const captureContainer = document.createElement('div');
+                document.body.appendChild(captureContainer);
+                
+                Object.assign(captureContainer.style, { 
+                    position: 'absolute', 
+                    left: '-9999px', 
+                    padding: '20px', 
+                    background: getComputedStyle(document.documentElement).getPropertyValue('--cor-fundo-pagina'), 
+                    display: 'inline-block',
+                    width: 'auto' 
+                });
+                
+                if (document.getElementById('hasTitle').checked) captureContainer.appendChild(titleEl.cloneNode(true));
+                
+                const tableEl = tableWrapperEl.querySelector('table');
+                const tableClone = tableEl.cloneNode(true);
+                captureContainer.appendChild(tableClone);
+                
+                if (document.getElementById('hasFooter').checked) captureContainer.appendChild(footerEl.cloneNode(true));
+
+                html2canvas(captureContainer, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
+                    tableImageDataUrl = canvas.toDataURL('image/png');
+                    const previewImg = document.getElementById('tablePreview');
+                    if(previewImg) previewImg.src = tableImageDataUrl;
+                    document.body.removeChild(captureContainer);
+                    overlay.style.display = originalOverlayDisplay; 
+                    resolve();
+                }).catch((err) => { overlay.style.display = originalOverlayDisplay; reject(err); });
+            });
+        }
+
+        function closeShareModal() { document.getElementById('shareModal').style.display = 'none'; }
+        function downloadImage() { if (!tableImageDataUrl) return; const link = document.createElement('a'); const title = document.getElementById('customTitle').innerText || 'minha-tabela'; link.download = `${title.toLowerCase().replace(/\s+/g, '-')}.png`; link.href = tableImageDataUrl; document.body.appendChild(link); link.click(); document.body.removeChild(link); }
+        function copyText() { const textarea = document.getElementById('tweetText'); textarea.select(); try { document.execCommand('copy'); alert('Texto copiado!'); } catch (err) { alert('Erro ao copiar texto.'); } }
+        
+        // Função para Abrir o X
+        function openTwitter() {
+            const tweetText = encodeURIComponent(document.getElementById('tweetText').value);
+            const url = `https://twitter.com/intent/tweet?text=${tweetText}`;
+            window.open(url, '_blank');
+        }
+
+        const chatBox = document.getElementById('chatBox');
+        const chatIconContainer = document.getElementById('chatIconContainer');
+        const chatNotification = document.getElementById('chatNotification');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatReplies = document.getElementById('chatReplies');
+        let notificationTimer;
+
+        function showNotification() { chatNotification.classList.add('visible'); chatIconContainer.classList.add('vibrating'); }
+        function toggleChat() { chatBox.classList.toggle('show'); if (chatBox.classList.contains('show')) { chatNotification.classList.remove('visible'); chatIconContainer.classList.remove('vibrating'); } }
+        function addMessage(text, sender = 'bot') { const messageDiv = document.createElement('div'); messageDiv.className = `message ${sender}`; messageDiv.innerHTML = text; chatMessages.appendChild(messageDiv); chatMessages.scrollTop = chatMessages.scrollHeight; }
+        function showInitialReplies() { chatReplies.innerHTML = `<button class="chat-reply-btn" onclick="handleReply(this)">Uau, que demais! Vou aproveitar agora</button><button class="chat-reply-btn" onclick="handleReply(this)">Agradeço, mas vou deixar passar (por enquanto...)</button><button class="chat-reply-btn" onclick="handleReply(this)">Amei! Tem outros cupons?</button>`; }
+        
+        function handleReply(button) { 
+            const replyText = button.innerText; 
+            addMessage(replyText, 'user'); 
+            chatReplies.innerHTML = ''; 
+            setTimeout(() => { 
+                if (replyText.includes("outros cupons")) { 
+                    addMessage('Sim! 🧡<br>Eu tenho outros cupons disponíveis, e você pode encontrar todos eles no meu Linktree:<br>👉 <a href="https://linktr.ee/lalatears" target="_blank">https://linktr.ee/lalatears</a><br><br>Fique à vontade para conferir e aproveitar os descontos!'); 
+                } else if (replyText.includes("aproveitar agora")) { 
+                    addMessage("Perfeito! Não se esqueça de usar o cupom <strong>LALAVEST</strong> no site <a href='https://discursivas.com' target='_blank'>discursivas.com</a>. Boas compras!"); 
+                } else { 
+                    addMessage("Sem problemas! Fica para a próxima. 😉"); 
+                } 
+            }, 800); 
+        }
+        function startChatFlow() { 
+            chatMessages.innerHTML = ''; 
+            chatReplies.innerHTML = ''; 
+            addMessage('Eu tenho um cupom exclusivo que garante um desconto especial na compra de cursos de matérias isoladas para pré-vestibular no site Discursivas!<br><br>É só acessar <a href="https://discursivas.com" target="_blank">discursivas.com</a> e aplicar o cupom <strong>LALAVEST</strong> na finalização da compra. Aproveite para turbinar seus estudos com materiais completos e focados no que realmente cai na prova!'); 
+            showInitialReplies(); 
+        }
+
+        window.onload = function() {
+            toggleStripedOptions(); 
+            updateFirstColumnStyles(); 
+            applyStyles();
+            startChatFlow();
+            notificationTimer = setTimeout(showNotification, 60000);
+            window.onclick = function(event) { if (event.target == document.getElementById('shareModal')) { closeShareModal(); } }
+        };
+    </script>
+</body>
+</html>
