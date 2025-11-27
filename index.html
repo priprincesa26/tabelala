@@ -40,7 +40,7 @@
             color: #333;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden; /* Evita rolagem horizontal da página inteira */
+            overflow-x: hidden;
         }
 
         /* HEADER SUPERIOR */
@@ -55,7 +55,7 @@
             z-index: 30;
             position: sticky;
             top: 0;
-            width: 100%; /* Garante largura total */
+            width: 100%;
             left: 0;
         }
 
@@ -65,7 +65,7 @@
             margin: 0;
             font-weight: bold;
             text-align: center;
-            word-wrap: break-word; /* Evita que texto longo quebre layout */
+            word-wrap: break-word;
         }
 
         /* LAYOUT PRINCIPAL */
@@ -75,7 +75,7 @@
             align-items: flex-start;
             position: relative;
             width: 100%;
-            max-width: 100vw; /* Limite absoluto */
+            max-width: 100vw;
         }
 
         /* MENU LATERAL (SIDEBAR) */
@@ -102,7 +102,6 @@
         /* ÁREA DE CONTEÚDO */
         .content-area {
             flex: 1;
-            /* width: 100% e min-width: 0 são cruciais para responsividade com flexbox e tabelas */
             width: 100%; 
             min-width: 0; 
             padding: 40px;
@@ -110,23 +109,21 @@
             flex-direction: column;
             align-items: center;
             background-color: var(--cor-fundo-pagina);
-            overflow: hidden; /* Impede que filhos estourem a largura */
+            overflow: hidden;
         }
 
         /* ROLAGEM DA TABELA */
         .table-wrapper {
             width: 100%;
-            max-width: 100%; /* Garante que respeita o pai */
+            max-width: 100%;
             overflow-x: auto; 
-            -webkit-overflow-scrolling: touch; /* Rolagem suave no iOS */
+            -webkit-overflow-scrolling: touch;
             margin-bottom: 5px;
-            padding-bottom: 15px; /* Espaço extra para barra de rolagem */
+            padding-bottom: 15px;
             position: relative;
-            /* Borda transparente para garantir scroll visível */
             border-bottom: 1px solid transparent; 
         }
 
-        /* Estilo da barra de rolagem da tabela */
         .table-wrapper::-webkit-scrollbar { height: 12px; }
         .table-wrapper::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         .table-wrapper::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; border: 3px solid #f1f1f1; }
@@ -138,7 +135,6 @@
             border: 1px solid var(--cor-divisorias); 
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
             margin: 0 auto; 
-            /* Remove max-width para permitir scroll */
         }
         
         th, td { 
@@ -208,9 +204,12 @@
         }
         .btn-show-sidebar:hover { transform: scale(1.1); }
 
-        .btn-action { background-color: var(--site-btn-bg); color: var(--site-header-text); border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px; min-width: 140px; justify-content: center; flex: 1 1 auto; /* Flexibilidade no mobile */ }
+        .btn-action { background-color: var(--site-btn-bg); color: var(--site-header-text); border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px; min-width: 140px; justify-content: center; flex: 1 1 auto; }
         .btn-action:hover { filter: brightness(0.9); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
         .btn-action.wide { width: 100%; max-width: 300px; margin-top: 10px; }
+        /* Botão específico de desfazer */
+        .btn-undo { background-color: #d9534f; }
+        .btn-undo:hover { background-color: #c9302c; }
 
         /* Estilos do Menu Lateral */
         .section-title { font-size: 1.1rem; color: var(--cor-divisorias); border-bottom: 2px solid var(--cor-divisorias); padding-bottom: 5px; margin: 15px 0 10px; font-weight: bold; }
@@ -230,7 +229,7 @@
         .checkbox-group input { margin-right: 8px; }
         .checkbox-group input:disabled + label { color: #aaa; text-decoration: line-through; }
 
-        /* RESPONSIVIDADE MOBILE (CORRIGIDA) */
+        /* RESPONSIVIDADE MOBILE */
         @media (max-width: 900px) {
             .site-header h1 { font-size: 1.2rem; }
             
@@ -248,7 +247,7 @@
                 top: 0;
                 border-right: none;
                 border-bottom: 1px solid #ddd;
-                z-index: 28; /* Menor que header */
+                z-index: 28;
             }
             
             .sidebar-container.collapsed { 
@@ -256,31 +255,30 @@
                 margin-left: 0; 
             }
             
-            /* Ajuste crítico da área de conteúdo no mobile */
             .content-area { 
-                padding: 15px 10px; /* Reduz padding para ganhar espaço */
+                padding: 15px 10px;
                 width: 100%;
                 max-width: 100vw;
             }
             
             .btn-show-sidebar { 
                 position: fixed; 
-                top: 70px; /* Logo abaixo do header */
+                top: 70px;
                 left: 10px; 
             }
 
             .custom-title { font-size: 1.8em; }
             
-            .actions-panel { padding-bottom: 100px; /* Espaço para chat */ }
+            .actions-panel { padding-bottom: 100px; }
             
             .btn-action {
                 font-size: 0.85rem;
                 padding: 10px;
-                min-width: 45%; /* Botões lado a lado */
+                min-width: 45%;
             }
         }
 
-        /* MODO IMPRESSÃO (Focus Mode) */
+        /* MODO IMPRESSÃO */
         .print-mode .site-header, 
         .print-mode .sidebar-container, 
         .print-mode .btn-show-sidebar, 
@@ -295,7 +293,7 @@
             width: 100%; 
             height: 100vh; 
             align-items: center;
-            overflow: auto; /* Permite scroll no modo foco */
+            overflow: auto;
         }
         .print-mode .table-wrapper { 
             overflow-x: auto; 
@@ -446,6 +444,7 @@
                 <button class="btn-action" onclick="addColumn()"><i class="fas fa-plus"></i> Adicionar Coluna</button>
                 <button class="btn-action" onclick="removeRow()"><i class="fas fa-minus"></i> Remover Linha</button>
                 <button class="btn-action" onclick="removeColumn()"><i class="fas fa-minus"></i> Remover Coluna</button>
+                <button class="btn-action btn-undo" onclick="undoMerge()"><i class="fas fa-undo"></i> Desfazer Mescla</button>
                 <button class="btn-action" onclick="togglePrintMode()"><i class="fas fa-camera"></i> Hora do Print</button>
                 <button class="btn-action wide" onclick="openShareModal()"><i class="fab fa-twitter"></i> Compartilhar no X</button>
             </div>
@@ -537,6 +536,32 @@
             docePastel: { bgPage: '#e0f7fa', bgCells: '#ffffff', borderColor: '#f48fb1', textColor: '#ad1457', titleColor: '#d81b60', footerColor: '#f48fb1', headerBgColor: '#f48fb1', headerTextColor: '#ffffff', stripedColor: '#fce4ec', fontFamily: "'Comic Neue', cursive" },
             mentaSuave: { bgPage: '#f0fdf4', bgCells: '#ffffff', borderColor: '#4ade80', textColor: '#14532d', titleColor: '#16a34a', footerColor: '#16a34a', headerBgColor: '#86efac', headerTextColor: '#064e3b', stripedColor: '#dcfce7', fontFamily: "'Architects Daughter', cursive" },
         };
+
+        // HISTÓRICO DE AÇÕES PARA DESFAZER
+        let historyStack = [];
+
+        function saveState() {
+            const table = document.getElementById('editableTable');
+            historyStack.push({
+                thead: table.querySelector('thead').innerHTML,
+                tbody: table.querySelector('tbody').innerHTML
+            });
+        }
+
+        function undoMerge() {
+            if (historyStack.length === 0) {
+                alert("Não há ações recentes para desfazer!");
+                return;
+            }
+            const lastState = historyStack.pop();
+            const table = document.getElementById('editableTable');
+            table.querySelector('thead').innerHTML = lastState.thead;
+            table.querySelector('tbody').innerHTML = lastState.tbody;
+            
+            // Reaplicar estilos e lógicas necessárias
+            updateFirstColumnStyles(); 
+            applyStyles(); 
+        }
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -724,6 +749,10 @@
 
         function executeMerge(direction) {
             if (!selectedMergeCell) return;
+
+            // SALVAR ESTADO ANTES DA MESCLA
+            saveState();
+
             const stripedCheck = document.getElementById('stripedRows');
             if (!stripedCheck.disabled) { stripedCheck.checked = false; stripedCheck.disabled = true; toggleStripedOptions(); }
             const grid = mapTableGrid();
@@ -854,4 +883,5 @@
     </script>
 </body>
 </html>
+
 
