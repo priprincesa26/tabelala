@@ -1,3 +1,5 @@
+<!-- START OF FILE 25 do 11 com undo.html -->
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -149,8 +151,12 @@
             white-space: nowrap; 
         }
 
-        th { background-color: var(--cor-cabecalho); color: var(--cor-letras-cabecalho); text-transform: uppercase; font-weight: 700; }
-        .special-header td.col-first { background-color: var(--cor-cabecalho); color: var(--cor-letras-cabecalho); text-transform: uppercase; font-weight: 700; }
+        /* ALTERAÇÃO AQUI: Removido text-transform: uppercase */
+        th { background-color: var(--cor-cabecalho); color: var(--cor-letras-cabecalho); font-weight: 700; }
+        
+        /* ALTERAÇÃO AQUI: Removido text-transform: uppercase */
+        .special-header td.col-first { background-color: var(--cor-cabecalho); color: var(--cor-letras-cabecalho); font-weight: 700; }
+        
         tr:hover td:not(.col-first) { background-color: #e0ccff; }
 
         /* PAINEL DE AÇÕES */
@@ -336,7 +342,9 @@
         .instructions ol { padding-left: 20px; margin: 0; }
         .instructions li { margin-bottom: 10px; }
 
-        .custom-title { text-align: center; color: var(--cor-titulo); text-transform: uppercase; margin-bottom: 15px; font-family: 'Indie Flower', cursive; font-weight: 700; font-size: 2.5em; width: 100%; outline: none; word-wrap: break-word; }
+        /* ALTERAÇÃO AQUI: Removido text-transform: uppercase */
+        .custom-title { text-align: center; color: var(--cor-titulo); margin-bottom: 15px; font-family: 'Indie Flower', cursive; font-weight: 700; font-size: 2.5em; width: 100%; outline: none; word-wrap: break-word; }
+        
         .custom-footer { text-align: center; color: var(--cor-assinatura); font-weight: 400; font-family: 'Indie Flower', cursive; margin-top: 10px; width: 100%; outline: none; font-size: 1.2em; word-wrap: break-word; }
 
         .info-box { position: fixed; bottom: 70px; right: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; max-width: 300px; display: none; }
@@ -883,5 +891,6 @@
     </script>
 </body>
 </html>
+
 
 
