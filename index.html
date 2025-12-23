@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>TabeLaLa - Monte sua tabela com @studies_lala</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Comic+Neue:wght@400;700&family=Dancing+Script&family=Indie+Flower&family=Pacifico&family=Quicksand:wght@400;700&family=Roboto:wght@400;700&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Indie+Flower&family=Pacifico&family=Quicksand:wght@400;700&family=Dancing+Script&family=Architects+Daughter&family=Shadows+Into+Light&family=Roboto:wght@400;700&family=Verdana:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         :root {
-            /* Cores Padrão */
+            /* Cores */
             --cor-fundo-pagina: #F5EBFF;
             --cor-fundo-tabela: #F8F2FF;
             --cor-divisorias: #4B0082;
@@ -228,10 +226,6 @@
         /* CORES FIXAS DOS BOTÕES */
         .btn-undo { background-color: #d9534f !important; }
         .btn-undo:hover { background-color: #c9302c !important; }
-        .btn-print { background-color: #28a745 !important; }
-        .btn-print:hover { background-color: #218838 !important; }
-        .btn-share-x { background-color: #1DA1F2 !important; }
-        .btn-share-x:hover { background-color: #1a91da !important; }
 
         /* Estilos do Menu Lateral */
         .section-title { font-size: 1.1rem; color: var(--cor-divisorias); border-bottom: 2px solid var(--cor-divisorias); padding-bottom: 5px; margin: 15px 0 10px; font-weight: bold; }
@@ -283,22 +277,41 @@
         .merge-btn.right { grid-column: 3; grid-row: 2; }
         .merge-btn.down { grid-column: 2; grid-row: 3; }
 
+        /* MODAL E INSTRUÇÕES */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
         .modal-content { background-color: white; padding: 30px; border-radius: 10px; width: 100%; max-width: 800px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center; max-height: 90vh; overflow-y: auto; }
         .modal h2 { color: var(--cor-divisorias); margin-bottom: 20px; font-family: 'Indie Flower', cursive; }
         .modal textarea { width: 100%; height: 120px; padding: 12px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 20px; font-family: Arial, sans-serif; resize: none; }
         .modal-actions { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        
         .modal-btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .modal-btn-primary { background-color: #1DA1F2; color: white; }
         .modal-btn-secondary { background-color: #6c757d; color: white; }
 
+        .preview-container { margin: 20px 0; border: 1px solid #ddd; border-radius: 8px; padding: 15px; background-color: #f9f9f9; display: flex; flex-direction: column; align-items: center; }
+        .preview-title { font-weight: bold; margin-bottom: 10px; color: #333; text-align: center; }
+        .preview-image-container { max-width: 100%; overflow: auto; display: flex; justify-content: center; }
+        .preview-image { max-width: 100%; border: 1px solid #ddd; border-radius: 4px; }
+        
+        .instructions { background-color: #f0f8ff; border-left: 4px solid #1DA1F2; padding: 15px; margin: 20px 0; text-align: left; border-radius: 4px; }
+        .instructions h3 { margin-top: 0; color: #1DA1F2; }
+        .instructions ol { padding-left: 20px; margin: 0; }
+        .instructions li { margin-bottom: 10px; }
+
         .custom-title { text-align: center; color: var(--cor-titulo); margin-bottom: 15px; font-family: 'Indie Flower', cursive; font-weight: 700; font-size: 2.5em; width: 100%; outline: none; word-wrap: break-word; }
         .custom-footer { text-align: center; color: var(--cor-assinatura); font-weight: 400; font-family: 'Indie Flower', cursive; margin-top: 10px; width: 100%; outline: none; font-size: 1.2em; word-wrap: break-word; }
 
+        /* INFORMAÇÕES (HORA DO PRINT) */
+        .info-box { position: fixed; bottom: 70px; right: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; max-width: 300px; display: none; }
+        .info-box.show { display: block; }
+
+        /* CHAT SECTION */
         .chat-icon-container { position: fixed; bottom: 20px; right: 20px; z-index: 1010; cursor: pointer; }
         .chat-icon { width: 60px; height: 60px; background-color: var(--site-btn-bg); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .notification-badge { position: absolute; top: -5px; right: -5px; width: 22px; height: 22px; background-color: red; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border: 2px solid white; }
         .notification-badge.visible { display: flex; }
+        .vibrating { animation: vibrate 1s ease-out infinite; }
+        @keyframes vibrate { 0%, 30%, 100% { transform: translate(0, 0) rotate(0); } 5% { transform: translate(-2px, -2px) rotate(-2deg); } 10% { transform: translate(2px, 2px) rotate(2deg); } 15% { transform: translate(-2px, 2px) rotate(-2deg); } 20% { transform: translate(2px, -2px) rotate(2deg); } 25% { transform: translate(0, 0) rotate(0); } }
         .chat-box { position: fixed; bottom: 100px; right: 20px; width: 350px; max-width: 90vw; background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; z-index: 1009; opacity: 0; transform: scale(0.9) translateY(10px); transform-origin: bottom right; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; }
         .chat-box.show { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
         .chat-header { background-color: var(--site-btn-bg); color: white; padding: 15px; font-weight: bold; }
@@ -308,6 +321,10 @@
         .message.user { background-color: #e0ccff; color: #333; border-bottom-right-radius: 4px; align-self: flex-end; }
         .chat-replies { padding: 15px; border-top: 1px solid #eee; display: flex; flex-direction: column; gap: 8px; }
         .chat-reply-btn { background: #f9f9f9; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; text-align: left; }
+        .chat-reply-btn:hover { background-color: #f0e6ff; border-color: var(--site-btn-bg); }
+        .loading { display: none; text-align: center; padding: 20px; }
+        .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid #1DA1F2; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -400,8 +417,8 @@
                 <button class="btn-action" onclick="removeRow()"><i class="fas fa-minus"></i> Remover Linha</button>
                 <button class="btn-action" onclick="removeColumn()"><i class="fas fa-minus"></i> Remover Coluna</button>
                 <button class="btn-action btn-undo" onclick="undoMerge()"><i class="fas fa-undo"></i> Desfazer Mescla</button>
-                <button class="btn-action btn-print" onclick="togglePrintMode()"><i class="fas fa-camera"></i> Hora do Print</button>
-                <button class="btn-action btn-share-x wide" onclick="openShareModal()"><i class="fab fa-twitter"></i> Compartilhar no X</button>
+                <button class="btn-action" onclick="togglePrintMode()"><i class="fas fa-camera"></i> Hora do Print</button>
+                <button class="btn-action wide" onclick="openShareModal()"><i class="fab fa-twitter"></i> Compartilhar no X</button>
             </div>
         </div>
     </div>
@@ -409,18 +426,57 @@
     <button class="btn-back" id="backButton" onclick="togglePrintMode()"><i class="fas fa-arrow-left"></i> Voltar</button>
     <button class="btn-info" id="infoButton" onclick="toggleInfo()"><i class="fas fa-info-circle"></i></button>
 
+    <div class="info-box" id="infoBox">
+        <p><strong>Para tirar um print pelo computador:</strong></p>
+        <p>Pressione: <kbd>Windows + Shift + S</kbd> e selecione a área desejada.</p>
+        <p><strong>Dica Extra:</strong> Segure o clique em uma célula para mesclar!</p>
+    </div>
+
+    <!-- Modal para compartilhar no X -->
     <div id="shareModal" class="modal">
         <div class="modal-content">
-            <h2>Compartilhar no X</h2>
-            <div class="loading" id="loadingIndicator"><div class="loading-spinner"></div><p>Gerando imagem...</p></div>
+            <h2>Compartilhar sua Tabela no X</h2>
+            
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>Gerando imagem da sua tabela...</p>
+            </div>
+            
             <div id="shareContent" style="display: none;">
-                <div class="preview-container"><img id="tablePreview" class="preview-image" alt="Prévia"></div>
-                <textarea id="tweetText"></textarea>
+                <div class="preview-container">
+                    <div class="preview-title">Prévia da sua tabela:</div>
+                    <div class="preview-image-container">
+                        <img id="tablePreview" class="preview-image" alt="Prévia da tabela">
+                    </div>
+                </div>
+                
+                <div class="instructions">
+                    <h3>Como compartilhar sua tabela no X:</h3>
+                    <ol>
+                        <li>Clique em "Copiar Texto" para copiar a mensagem</li>
+                        <li>Clique em "Baixar Imagem" para salvar a tabela</li>
+                        <li>Abra o X (Twitter) e crie um novo post</li>
+                        <li>Cole o texto (Ctrl+V) e faça upload da imagem</li>
+                        <li>Ou clique em "Abrir X" para ir diretamente</li>
+                    </ol>
+                </div>
+                
+                <p>Texto para compartilhar:</p>
+                <textarea id="tweetText">Minha tabela personalizada! ✨ Fiz usando o site da @studies_lala: https://priprincesa26.github.io/fa-asuatabela/</textarea>
+                
                 <div class="modal-actions">
-                    <button class="modal-btn modal-btn-primary" onclick="copyText()">Copiar Texto</button>
-                    <button class="modal-btn modal-btn-primary" onclick="downloadImage()">Baixar Imagem</button>
-                    <button class="modal-btn modal-btn-primary" onclick="openTwitter()">Abrir X</button>
-                    <button class="modal-btn modal-btn-secondary" onclick="closeShareModal()">Fechar</button>
+                    <button class="modal-btn modal-btn-primary" onclick="copyText()">
+                        <i class="fas fa-copy"></i> Copiar Texto
+                    </button>
+                    <button class="modal-btn modal-btn-primary" onclick="downloadImage()">
+                        <i class="fas fa-download"></i> Baixar Imagem
+                    </button>
+                    <button class="modal-btn modal-btn-primary" onclick="openTwitter()">
+                        <i class="fab fa-twitter"></i> Abrir X
+                    </button>
+                    <button class="modal-btn modal-btn-secondary" onclick="closeShareModal()">
+                        <i class="fas fa-times"></i> Fechar
+                    </button>
                 </div>
             </div>
         </div>
@@ -463,12 +519,29 @@
             });
         }
 
+        function checkMergedCells() {
+            const table = document.getElementById('editableTable');
+            const hasMerged = table.querySelector('[rowspan]:not([rowspan="1"]), [colspan]:not([colspan="1"])');
+            const stripedRowsCheckbox = document.getElementById('stripedRows');
+            if (hasMerged) {
+                stripedRowsCheckbox.checked = false;
+                stripedRowsCheckbox.disabled = true;
+                toggleStripedOptions();
+            } else {
+                stripedRowsCheckbox.disabled = false;
+            }
+        }
+
         function undoMerge() {
-            if (historyStack.length === 0) return;
+            if (historyStack.length === 0) {
+                alert("Não há ações recentes para desfazer!");
+                return;
+            }
             const lastState = historyStack.pop();
             const table = document.getElementById('editableTable');
             table.querySelector('thead').innerHTML = lastState.thead;
             table.querySelector('tbody').innerHTML = lastState.tbody;
+            checkMergedCells();
             updateFirstColumnStyles(); 
             applyStyles(); 
         }
@@ -559,8 +632,8 @@
             updateFirstColumnStyles(); applyStyles(); 
         }
 
-        function removeRow() { if (document.querySelector('#editableTable tbody').rows.length > 1) document.querySelector('#editableTable tbody').deleteRow(-1); updateFirstColumnStyles(); }
-        function removeColumn() { if (document.querySelector('#editableTable thead tr').cells.length > 1) { document.querySelector('#editableTable thead tr').deleteCell(-1); document.querySelectorAll('#editableTable tbody tr').forEach(row => row.deleteCell(-1)); } updateFirstColumnStyles(); }
+        function removeRow() { if (document.querySelector('#editableTable tbody').rows.length > 1) document.querySelector('#editableTable tbody').deleteRow(-1); checkMergedCells(); updateFirstColumnStyles(); }
+        function removeColumn() { if (document.querySelector('#editableTable thead tr').cells.length > 1) { document.querySelector('#editableTable thead tr').deleteCell(-1); document.querySelectorAll('#editableTable tbody tr').forEach(row => row.deleteCell(-1)); } checkMergedCells(); updateFirstColumnStyles(); }
         function toggleTitle() { document.getElementById('customTitle').style.display = document.getElementById('hasTitle').checked ? 'block' : 'none'; }
         function toggleFooter() { document.getElementById('customFooter').style.display = document.getElementById('hasFooter').checked ? 'block' : 'none'; }
         
@@ -631,54 +704,123 @@
                 else if (direction === 'left') { const nc = cellInfo.c - 1; if (nc >= 0 && grid[cellInfo.r][nc]) { neighbor = grid[cellInfo.r][nc]; if (neighbor.r === cellInfo.r && neighbor.rowSpan === cellInfo.rowSpan) { neighbor.element.colSpan += selectedMergeCell.colSpan; selectedMergeCell.remove(); } } }
                 else if (direction === 'up') { const nr = cellInfo.r - 1; if (nr >= 0 && grid[nr][cellInfo.c]) { neighbor = grid[nr][cellInfo.c]; if (neighbor.c === cellInfo.c && neighbor.colSpan === cellInfo.colSpan) { neighbor.element.rowSpan += selectedMergeCell.rowSpan; selectedMergeCell.remove(); } } }
             } catch (err) { console.error(err); }
+            checkMergedCells();
             hideMergeUI(); updateFirstColumnStyles(); applyStyles();
         }
 
         let tableImageDataUrl = '';
         function togglePrintMode() { document.body.classList.toggle('print-mode'); }
-        function toggleInfo() { alert("Use Alt+PrintScreen ou Windows+Shift+S para printar a área!"); }
+        function toggleInfo() { document.getElementById('infoBox').classList.toggle('show'); }
 
         function openShareModal() {
-            const modal = document.getElementById('shareModal'); modal.style.display = 'flex';
-            document.getElementById('loadingIndicator').style.display = 'block'; document.getElementById('shareContent').style.display = 'none';
+            const modal = document.getElementById('shareModal');
+            modal.style.display = 'flex';
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('shareContent').style.display = 'none';
+
             captureTableImage().then(() => {
-                document.getElementById('loadingIndicator').style.display = 'none'; document.getElementById('shareContent').style.display = 'block';
-                document.getElementById('tweetText').value = `Minha tabela personalizada! ✨ Fiz usando o site da @studies_lala: https://priprincesa26.github.io/fa-asuatabela/`;
-            });
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('shareContent').style.display = 'block';
+                const title = document.getElementById('customTitle').innerText;
+                document.getElementById('tweetText').value = `Minha tabela "${title}"! ✨ Fiz usando o site da @studies_lala: https://priprincesa26.github.io/fa-asuatabela/`;
+            }).catch(err => { alert("Erro ao gerar imagem."); closeShareModal(); });
         }
 
         function captureTableImage() {
-            return new Promise((resolve) => {
-                const titleEl = document.getElementById('customTitle'); const tableWrapperEl = document.getElementById('tableWrapper'); 
-                const footerEl = document.getElementById('customFooter'); const captureContainer = document.createElement('div');
+            return new Promise((resolve, reject) => {
+                const titleEl = document.getElementById('customTitle');
+                const tableWrapperEl = document.getElementById('tableWrapper'); 
+                const footerEl = document.getElementById('customFooter');
+                const overlay = document.getElementById('mergeOverlay');
+                
+                const originalOverlayDisplay = overlay.style.display;
+                overlay.style.display = 'none';
+
+                const captureContainer = document.createElement('div');
                 document.body.appendChild(captureContainer);
-                Object.assign(captureContainer.style, { position: 'absolute', left: '-9999px', padding: '20px', background: getComputedStyle(document.documentElement).getPropertyValue('--cor-fundo-pagina'), display: 'inline-block', width: 'auto' });
-                if (document.getElementById('hasTitle').checked) captureContainer.appendChild(titleEl.cloneNode(true));
-                captureContainer.appendChild(tableWrapperEl.querySelector('table').cloneNode(true));
-                if (document.getElementById('hasFooter').checked) captureContainer.appendChild(footerEl.cloneNode(true));
-                html2canvas(captureContainer, { scale: 2, useCORS: true }).then(canvas => {
-                    tableImageDataUrl = canvas.toDataURL('image/png'); document.getElementById('tablePreview').src = tableImageDataUrl;
-                    document.body.removeChild(captureContainer); resolve();
+                
+                Object.assign(captureContainer.style, { 
+                    position: 'absolute', 
+                    left: '-9999px', 
+                    padding: '20px', 
+                    background: getComputedStyle(document.documentElement).getPropertyValue('--cor-fundo-pagina'), 
+                    display: 'inline-block',
+                    width: 'auto' 
                 });
+                
+                if (document.getElementById('hasTitle').checked) captureContainer.appendChild(titleEl.cloneNode(true));
+                
+                const tableEl = tableWrapperEl.querySelector('table');
+                const tableClone = tableEl.cloneNode(true);
+                captureContainer.appendChild(tableClone);
+                
+                if (document.getElementById('hasFooter').checked) captureContainer.appendChild(footerEl.cloneNode(true));
+
+                html2canvas(captureContainer, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
+                    tableImageDataUrl = canvas.toDataURL('image/png');
+                    const previewImg = document.getElementById('tablePreview');
+                    if(previewImg) previewImg.src = tableImageDataUrl;
+                    document.body.removeChild(captureContainer);
+                    overlay.style.display = originalOverlayDisplay; 
+                    resolve();
+                }).catch((err) => { overlay.style.display = originalOverlayDisplay; reject(err); });
             });
         }
 
         function closeShareModal() { document.getElementById('shareModal').style.display = 'none'; }
-        function downloadImage() { const link = document.createElement('a'); link.download = 'tabela-lala.png'; link.href = tableImageDataUrl; link.click(); }
-        function copyText() { const textarea = document.getElementById('tweetText'); textarea.select(); document.execCommand('copy'); alert('Texto copiado!'); }
-        function openTwitter() { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(document.getElementById('tweetText').value)}`, '_blank'); }
-
-        function toggleChat() { document.getElementById('chatBox').classList.toggle('show'); document.getElementById('chatNotification').classList.remove('visible'); }
-        function addMessage(text, sender = 'bot') { const msg = document.createElement('div'); msg.className = `message ${sender}`; msg.innerHTML = text; document.getElementById('chatMessages').appendChild(msg); }
+        function downloadImage() { if (!tableImageDataUrl) return; const link = document.createElement('a'); const title = document.getElementById('customTitle').innerText || 'minha-tabela'; link.download = `${title.toLowerCase().replace(/\s+/g, '-')}.png`; link.href = tableImageDataUrl; document.body.appendChild(link); link.click(); document.body.removeChild(link); }
+        function copyText() { const textarea = document.getElementById('tweetText'); textarea.select(); try { document.execCommand('copy'); alert('Texto copiado!'); } catch (err) { alert('Erro ao copiar texto.'); } }
         
+        function openTwitter() {
+            const tweetText = encodeURIComponent(document.getElementById('tweetText').value);
+            const url = `https://twitter.com/intent/tweet?text=${tweetText}`;
+            window.open(url, '_blank');
+        }
+
+        const chatBox = document.getElementById('chatBox');
+        const chatIconContainer = document.getElementById('chatIconContainer');
+        const chatNotification = document.getElementById('chatNotification');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatReplies = document.getElementById('chatReplies');
+        let notificationTimer;
+
+        function showNotification() { chatNotification.classList.add('visible'); chatIconContainer.classList.add('vibrating'); }
+        function toggleChat() { chatBox.classList.toggle('show'); if (chatBox.classList.contains('show')) { chatNotification.classList.remove('visible'); chatIconContainer.classList.remove('vibrating'); } }
+        function addMessage(text, sender = 'bot') { const messageDiv = document.createElement('div'); messageDiv.className = `message ${sender}`; messageDiv.innerHTML = text; chatMessages.appendChild(messageDiv); chatMessages.scrollTop = chatMessages.scrollHeight; }
+        function showInitialReplies() { chatReplies.innerHTML = `<button class="chat-reply-btn" onclick="handleReply(this)">Uau, que demais! Vou aproveitar agora</button><button class="chat-reply-btn" onclick="handleReply(this)">Agradeço, mas vou deixar passar (por enquanto...)</button><button class="chat-reply-btn" onclick="handleReply(this)">Amei! Tem outros cupons?</button>`; }
+        
+        function handleReply(button) { 
+            const replyText = button.innerText; 
+            addMessage(replyText, 'user'); 
+            chatReplies.innerHTML = ''; 
+            setTimeout(() => { 
+                if (replyText.includes("outros cupons")) { 
+                    addMessage('Sim! 🧡<br>Eu tenho outros cupons disponíveis, e você pode encontrar todos eles no meu Linktree:<br>👉 <a href="https://linktr.ee/lalatears" target="_blank">https://linktr.ee/lalatears</a><br><br>Fique à vontade para conferir e aproveitar os descontos!'); 
+                } else if (replyText.includes("aproveitar agora")) { 
+                    addMessage("Perfeito! Não se esqueça de usar o cupom <strong>LALAVEST</strong> no site <a href='https://discursivas.com' target='_blank'>discursivas.com</a>. Boas compras!"); 
+                } else { 
+                    addMessage("Sem problemas! Fica para a próxima. 😉"); 
+                } 
+            }, 800); 
+        }
+
+        function startChatFlow() { 
+            chatMessages.innerHTML = ''; 
+            chatReplies.innerHTML = ''; 
+            addMessage('Eu tenho um cupom exclusivo que garante um desconto especial na compra de cursos de matérias isoladas para pré-vestibular no site Discursivas!<br><br>É só acessar <a href="https://discursivas.com" target="_blank">discursivas.com</a> e aplicar o cupom <strong>LALAVEST</strong> na finalização da compra. Aproveite para turbinar seus estudos com materiais completos e focados no que realmente cai na prova!'); 
+            showInitialReplies(); 
+        }
+
         window.onload = function() {
             applyPreset('doceLavanda');
-            addMessage('Oi! Use o cupom <strong>LALAVEST</strong> no site <a href="https://discursivas.com" target="_blank">discursivas.com</a> para ganhar desconto nos cursos isolados!');
-            setTimeout(() => document.getElementById('chatNotification').classList.add('visible'), 2000);
+            startChatFlow();
+            notificationTimer = setTimeout(showNotification, 60000);
+            window.onclick = function(event) { if (event.target == document.getElementById('shareModal')) { closeShareModal(); } }
         };
     </script>
 </body>
 </html>
+
 
 
 
