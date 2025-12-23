@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>TabeLaLa - Monte sua tabela com @studies_lala</title>
-<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Indie+Flower&family=Pacifico&family=Quicksand:wght@400;700&family=Dancing+Script&family=Architects+Daughter&family=Shadows+Into+Light&family=Roboto:wght@400;700&family=Verdana:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Quicksand:wght@400;700&family=Dancing+Script&family=Roboto:wght@400;700&family=Verdana:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <style>
@@ -226,6 +226,12 @@
     .btn-undo { background-color: #d9534f !important; }
     .btn-undo:hover { background-color: #c9302c !important; }
 
+    .btn-print { background-color: #28a745 !important; }
+    .btn-print:hover { background-color: #218838 !important; }
+
+    .btn-share { background-color: #1DA1F2 !important; }
+    .btn-share:hover { background-color: #0d8ddb !important; }
+
     /* Estilos do Menu Lateral */
     .section-title { font-size: 1.1rem; color: var(--cor-divisorias); border-bottom: 2px solid var(--cor-divisorias); padding-bottom: 5px; margin: 15px 0 10px; font-weight: bold; }
     .presets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -279,7 +285,7 @@
     /* MODAL E INSTRUÇÕES */
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
     .modal-content { background-color: white; padding: 30px; border-radius: 10px; width: 100%; max-width: 800px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center; max-height: 90vh; overflow-y: auto; }
-    .modal h2 { color: var(--cor-divisorias); margin-bottom: 20px; font-family: 'Indie Flower', cursive; }
+    .modal h2 { color: var(--cor-divisorias); margin-bottom: 20px; font-family: 'Comic Neue', cursive; }
     .modal textarea { width: 100%; height: 120px; padding: 12px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 20px; font-family: Arial, sans-serif; resize: none; }
     .modal-actions { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
     
@@ -297,8 +303,8 @@
     .instructions ol { padding-left: 20px; margin: 0; }
     .instructions li { margin-bottom: 10px; }
 
-    .custom-title { text-align: center; color: var(--cor-titulo); margin-bottom: 15px; font-family: 'Indie Flower', cursive; font-weight: 700; font-size: 2.5em; width: 100%; outline: none; word-wrap: break-word; }
-    .custom-footer { text-align: center; color: var(--cor-assinatura); font-weight: 400; font-family: 'Indie Flower', cursive; margin-top: 10px; width: 100%; outline: none; font-size: 1.2em; word-wrap: break-word; }
+    .custom-title { text-align: center; color: var(--cor-titulo); margin-bottom: 15px; font-family: 'Comic Neue', cursive; font-weight: 700; font-size: 2.5em; width: 100%; outline: none; word-wrap: break-word; }
+    .custom-footer { text-align: center; color: var(--cor-assinatura); font-weight: 400; font-family: 'Comic Neue', cursive; margin-top: 10px; width: 100%; outline: none; font-size: 1.2em; word-wrap: break-word; }
 
     /* INFORMAÇÕES (HORA DO PRINT) */
     .info-box { position: fixed; bottom: 70px; right: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; max-width: 300px; display: none; }
@@ -328,12 +334,8 @@
     .font-preload {
         font-family:
             'Comic Neue',
-            'Indie Flower',
-            'Pacifico',
             'Quicksand',
             'Dancing Script',
-            'Architects Daughter',
-            'Shadows Into Light',
             'Roboto',
             Arial,
             Georgia,
@@ -388,7 +390,7 @@
         <div class="control-group"><label>Texto do Cabeçalho</label><div class="color-input-container" onclick="document.getElementById('headerTextColor').click()"><i class="fas fa-palette color-picker-icon"></i><div class="color-display"><span class="color-code" id="headerTextColorCode">#FFFFFF</span><div class="color-preview" id="headerTextColorPreview" style="background-color: #FFFFFF"></div></div><input type="color" id="headerTextColor" value="#FFFFFF" onchange="updateColorDisplay(this)" class="color-input"></div></div>
 
         <div class="section-title">Estilo e Fonte</div>
-        <div class="control-group"><select id="fontFamily" onchange="applyStyles()"><option value="'Comic Neue', cursive" selected>Comic Neue</option><option value="'Indie Flower', cursive">Indie Flower</option><option value="'Pacifico', cursive">Pacifico</option><option value="'Quicksand', sans-serif">Quicksand</option><option value="'Dancing Script', cursive">Dancing Script</option><option value="'Architects Daughter', cursive">Architects Daughter</option><option value="'Shadows Into Light', cursive">Shadows Into Light</option><option value="Arial, sans-serif">Arial</option><option value="Georgia, serif">Georgia</option><option value="Verdana, sans-serif">Verdana</option><option value="'Trebuchet MS', sans-serif">Trebuchet MS</option><option value="'Courier New', monospace">Courier New</option></select></div>
+        <div class="control-group"><select id="fontFamily" onchange="applyStyles()"><option value="'Comic Neue', cursive" selected>Comic Neue</option><option value="'Dancing Script', cursive">Dancing Script</option><option value="'Quicksand', sans-serif">Quicksand</option><option value="Arial, sans-serif">Arial</option><option value="Georgia, serif">Georgia</option><option value="Verdana, sans-serif">Verdana</option><option value="'Trebuchet MS', sans-serif">Trebuchet MS</option><option value="'Courier New', monospace">Courier New</option></select></div>
         <div class="checkbox-group"><input type="checkbox" id="hasTitle" checked onchange="toggleTitle()"><label for="hasTitle">Mostrar Título</label></div>
         <div class="checkbox-group"><input type="checkbox" id="hasFooter" checked onchange="toggleFooter()"><label for="hasFooter">Mostrar Assinatura</label></div>
         <div class="checkbox-group"><input type="checkbox" id="stripedRows" checked onchange="toggleStripedOptions()"><label for="stripedRows">Tons Intercalados</label></div>
@@ -438,8 +440,8 @@
             <button class="btn-action" onclick="removeRow()"><i class="fas fa-minus"></i> Remover Linha</button>
             <button class="btn-action" onclick="removeColumn()"><i class="fas fa-minus"></i> Remover Coluna</button>
             <button class="btn-action btn-undo" onclick="undoMerge()"><i class="fas fa-undo"></i> Desfazer Mescla</button>
-            <button class="btn-action" onclick="togglePrintMode()"><i class="fas fa-camera"></i> Hora do Print</button>
-            <button class="btn-action wide" onclick="openShareModal()"><i class="fab fa-twitter"></i> Compartilhar no X</button>
+            <button class="btn-action btn-print" onclick="togglePrintMode()"><i class="fas fa-camera"></i> Hora do Print</button>
+            <button class="btn-action wide btn-share" onclick="openShareModal()"><i class="fab fa-twitter"></i> Compartilhar no X</button>
         </div>
     </div>
 </div>
@@ -516,7 +518,7 @@
 <script>
     const presets = {
         doceLavanda: { bgPage: '#F5EBFF', bgCells: '#F8F2FF', borderColor: '#4B0082', textColor: '#4A2568', titleColor: '#4A2568', footerColor: '#9370DB', headerBgColor: '#9370DB', headerTextColor: '#FFFFFF', stripedColor: '#e6d6ff', fontFamily: "'Comic Neue', cursive" },
-        florestaEncantada: { bgPage: '#f0fff0', bgCells: '#fafffa', borderColor: '#006400', textColor: '#2f4f4f', titleColor: '#2e8b57', footerColor: '#2e8b57', headerBgColor: '#2e8b57', headerTextColor: '#ffffff', stripedColor: '#E8F5E9', fontFamily: "'Architects Daughter', cursive" },
+        florestaEncantada: { bgPage: '#f0fff0', bgCells: '#fafffa', borderColor: '#006400', textColor: '#2f4f4f', titleColor: '#2e8b57', footerColor: '#2e8b57', headerBgColor: '#2e8b57', headerTextColor: '#ffffff', stripedColor: '#E8F5E9', fontFamily: "'Comic Neue', cursive" },
         cadernoClassico: { bgPage: '#fdf5e6', bgCells: '#fffaf0', borderColor: '#8b4513', textColor: '#696969', titleColor: '#8b4513', footerColor: '#a0522d', headerBgColor: '#d2b48c', headerTextColor: '#4d3a24', stripedColor: '#F5F5DC', fontFamily: "'Georgia', serif" },
         brisaDoMar: { bgPage: '#0A1A2F', bgCells: '#122B43', borderColor: '#0077CC', textColor: '#E0F2FF', titleColor: '#4DA6FF', footerColor: '#66B3FF', headerBgColor: '#005A9E', headerTextColor: '#FFFFFF', stripedColor: '#1A365D', fontFamily: "Arial, sans-serif" },
         cinzaMinimalista: { bgPage: '#f5f5f5', bgCells: '#ffffff', borderColor: '#616161', textColor: '#212121', titleColor: '#424242', footerColor: '#757575', headerBgColor: '#bdbdbd', headerTextColor: '#000000', stripedColor: '#EEEEEE', fontFamily: "'Arial', sans-serif" },
@@ -525,7 +527,7 @@
         oceanoProfundo: { bgPage: '#0a192f', bgCells: '#112240', borderColor: '#64ffda', textColor: '#ccd6f6', titleColor: '#ffffff', footerColor: '#64ffda', headerBgColor: '#173a5e', headerTextColor: '#64ffda', stripedColor: '#0f2d52', fontFamily: "'Courier New', monospace" },
         terracotaSol: { bgPage: '#fcef9c', bgCells: '#fcef9c', borderColor: '#3f1719', textColor: '#680a1d', titleColor: '#680a1d', footerColor: '#ba2339', headerBgColor: '#ba2339', headerTextColor: '#fcef9c', stripedColor: '#e8b666', fontFamily: "Arial, sans-serif" },
         grafiteAmarelo: { bgPage: '#00332a', bgCells: '#000000', borderColor: '#00FFAA', textColor: '#E6E6FA', titleColor: '#FFFFFF', footerColor: '#FFFFFF', headerBgColor: '#00AA77', headerTextColor: '#FFFFFF', stripedColor: 'rgba(0, 170, 119, 0.25)', fontFamily: "Arial, sans-serif" },
-        rosaCereja: { bgPage: '#FFF0F5', bgCells: '#FFFFFF', borderColor: '#C2185B', textColor: '#880E4F', titleColor: '#C2185B', footerColor: '#F48FB1', headerBgColor: '#F48FB1', headerTextColor: '#FFFFFF', stripedColor: '#FCE4EC', fontFamily: "'Indie Flower', cursive" },
+        rosaCereja: { bgPage: '#FFF0F5', bgCells: '#FFFFFF', borderColor: '#C2185B', textColor: '#880E4F', titleColor: '#C2185B', footerColor: '#F48FB1', headerBgColor: '#F48FB1', headerTextColor: '#FFFFFF', stripedColor: '#FCE4EC', fontFamily: "'Comic Neue', cursive" },
         docePastel: { bgPage: '#e0f7fa', bgCells: '#ffffff', borderColor: '#f48fb1', textColor: '#ad1457', titleColor: '#d81b60', footerColor: '#f48fb1', headerBgColor: '#f48fb1', headerTextColor: '#ffffff', stripedColor: '#fce4ec', fontFamily: "'Comic Neue', cursive" },
         mentaSuave: { bgPage: '#fff5f7', bgCells: '#ffffff', borderColor: '#bbb', textColor: '#333', titleColor: '#d23669', footerColor: '#d23669', headerBgColor: '#ffb6c1', headerTextColor: '#000000', stripedColor: '#f0f0f0', fontFamily: "'Comic Neue', cursive" },
     };
@@ -841,6 +843,7 @@
 </script>
 </body>
 </html>
+
 
 
 
