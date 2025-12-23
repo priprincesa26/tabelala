@@ -1,5 +1,3 @@
-<!-- START OF FILE 25 do 11 com undo.html -->
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -11,7 +9,7 @@
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         :root {
-            /* Cores */
+            /* Cores Padrão */
             --cor-fundo-pagina: #F5EBFF;
             --cor-fundo-tabela: #F8F2FF;
             --cor-divisorias: #4B0082;
@@ -27,7 +25,7 @@
             --site-btn-bg: #9370DB;
         }
         
-        * { box-sizing: border-box; transition: all 0.3s ease; }
+        * { box-sizing: border-box; transition: background 0.3s, color 0.3s, border-color 0.3s; }
         
         html, body {
             margin: 0;
@@ -88,7 +86,6 @@
             padding: 20px;
             box-shadow: 2px 0 10px rgba(0,0,0,0.05);
             flex-shrink: 0;
-            
             position: sticky;
             top: 60px; 
             height: calc(100vh - 60px); 
@@ -151,13 +148,25 @@
             white-space: nowrap; 
         }
 
-        /* ALTERAÇÃO AQUI: Removido text-transform: uppercase */
         th { background-color: var(--cor-cabecalho); color: var(--cor-letras-cabecalho); font-weight: 700; }
         
-        /* ALTERAÇÃO AQUI: Removido text-transform: uppercase */
         .special-header td.col-first { background-color: var(--cor-cabecalho); color: var(--cor-letras-cabecalho); font-weight: 700; }
         
-        tr:hover td:not(.col-first) { background-color: #e0ccff; }
+        tr:hover td:not(.col-first) { background-color: rgba(0,0,0,0.05); }
+
+        /* LÓGICA ESPECIAL MODELO JANE AUSTEN (COLORIDO) */
+        .jane-austen-mode th:nth-child(5n+1) { background-color: #ffb6c1 !important; color: black !important; }
+        .jane-austen-mode th:nth-child(5n+2) { background-color: #ffdf93 !important; color: black !important; }
+        .jane-austen-mode th:nth-child(5n+3) { background-color: #ff9e9e !important; color: black !important; }
+        .jane-austen-mode th:nth-child(5n+4) { background-color: #a0e7ff !important; color: black !important; }
+        .jane-austen-mode th:nth-child(5n+5) { background-color: #96f7d2 !important; color: black !important; }
+
+        .jane-austen-mode thead tr th.col-first { background-color: #ffb6c1 !important; }
+        .jane-austen-mode tbody tr:nth-child(5n+1) td.col-first { background-color: #ffdf93 !important; color: black !important; }
+        .jane-austen-mode tbody tr:nth-child(5n+2) td.col-first { background-color: #ff9e9e !important; color: black !important; }
+        .jane-austen-mode tbody tr:nth-child(5n+3) td.col-first { background-color: #a0e7ff !important; color: black !important; }
+        .jane-austen-mode tbody tr:nth-child(5n+4) td.col-first { background-color: #96f7d2 !important; color: black !important; }
+        .jane-austen-mode tbody tr:nth-child(5n+5) td.col-first { background-color: #ffb6c1 !important; color: black !important; }
 
         /* PAINEL DE AÇÕES */
         .actions-panel {
@@ -213,9 +222,14 @@
         .btn-action { background-color: var(--site-btn-bg); color: var(--site-header-text); border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px; min-width: 140px; justify-content: center; flex: 1 1 auto; }
         .btn-action:hover { filter: brightness(0.9); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
         .btn-action.wide { width: 100%; max-width: 300px; margin-top: 10px; }
-        /* Botão específico de desfazer */
-        .btn-undo { background-color: #d9534f; }
-        .btn-undo:hover { background-color: #c9302c; }
+        
+        /* CORES FIXAS DOS BOTÕES */
+        .btn-undo { background-color: #d9534f !important; }
+        .btn-undo:hover { background-color: #c9302c !important; }
+        .btn-print { background-color: #28a745 !important; }
+        .btn-print:hover { background-color: #218838 !important; }
+        .btn-share-x { background-color: #1DA1F2 !important; }
+        .btn-share-x:hover { background-color: #1a91da !important; }
 
         /* Estilos do Menu Lateral */
         .section-title { font-size: 1.1rem; color: var(--cor-divisorias); border-bottom: 2px solid var(--cor-divisorias); padding-bottom: 5px; margin: 15px 0 10px; font-weight: bold; }
@@ -238,75 +252,21 @@
         /* RESPONSIVIDADE MOBILE */
         @media (max-width: 900px) {
             .site-header h1 { font-size: 1.2rem; }
-            
-            .main-layout { 
-                flex-direction: column; 
-                width: 100%;
-                overflow-x: hidden;
-            }
-            
-            .sidebar-container { 
-                width: 100%; 
-                height: auto; 
-                max-height: 50vh; 
-                position: relative; 
-                top: 0;
-                border-right: none;
-                border-bottom: 1px solid #ddd;
-                z-index: 28;
-            }
-            
-            .sidebar-container.collapsed { 
-                display: none; 
-                margin-left: 0; 
-            }
-            
-            .content-area { 
-                padding: 15px 10px;
-                width: 100%;
-                max-width: 100vw;
-            }
-            
-            .btn-show-sidebar { 
-                position: fixed; 
-                top: 70px;
-                left: 10px; 
-            }
-
+            .main-layout { flex-direction: column; width: 100%; overflow-x: hidden; }
+            .sidebar-container { width: 100%; height: auto; max-height: 50vh; position: relative; top: 0; border-right: none; border-bottom: 1px solid #ddd; z-index: 28; }
+            .sidebar-container.collapsed { display: none; margin-left: 0; }
+            .content-area { padding: 15px 10px; width: 100%; max-width: 100vw; }
+            .btn-show-sidebar { position: fixed; top: 70px; left: 10px; }
             .custom-title { font-size: 1.8em; }
-            
             .actions-panel { padding-bottom: 100px; }
-            
-            .btn-action {
-                font-size: 0.85rem;
-                padding: 10px;
-                min-width: 45%;
-            }
+            .btn-action { font-size: 0.85rem; padding: 10px; min-width: 45%; }
         }
 
         /* MODO IMPRESSÃO */
-        .print-mode .site-header, 
-        .print-mode .sidebar-container, 
-        .print-mode .btn-show-sidebar, 
-        .print-mode .actions-panel, 
-        .print-mode .chat-icon-container { 
-            display: none !important; 
-        }
-        .print-mode .content-area { 
-            padding: 20px; 
-            justify-content: flex-start; 
-            background-color: var(--cor-fundo-pagina); 
-            width: 100%; 
-            height: 100vh; 
-            align-items: center;
-            overflow: auto;
-        }
-        .print-mode .table-wrapper { 
-            overflow-x: auto; 
-            max-width: 98vw;
-        }
+        .print-mode .site-header, .print-mode .sidebar-container, .print-mode .btn-show-sidebar, .print-mode .actions-panel, .print-mode .chat-icon-container { display: none !important; }
+        .print-mode .content-area { padding: 20px; justify-content: flex-start; background-color: var(--cor-fundo-pagina); width: 100%; height: 100vh; align-items: center; overflow: auto; }
+        .print-mode .table-wrapper { overflow-x: auto; max-width: 98vw; }
         .print-mode .btn-back, .print-mode .btn-info { display: inline-flex; }
-        
         .btn-back, .btn-info { position: fixed; bottom: 20px; display: none; z-index: 1000; border: none; padding: 12px; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; }
         .btn-back { left: 20px; background-color: var(--site-btn-bg); }
         .btn-info { right: 20px; background-color: #17a2b8; }
@@ -321,53 +281,31 @@
         .merge-btn.right { grid-column: 3; grid-row: 2; }
         .merge-btn.down { grid-column: 2; grid-row: 3; }
 
-        /* MODAL E INSTRUÇÕES */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
         .modal-content { background-color: white; padding: 30px; border-radius: 10px; width: 100%; max-width: 800px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center; max-height: 90vh; overflow-y: auto; }
         .modal h2 { color: var(--cor-divisorias); margin-bottom: 20px; font-family: 'Indie Flower', cursive; }
         .modal textarea { width: 100%; height: 120px; padding: 12px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 20px; font-family: Arial, sans-serif; resize: none; }
         .modal-actions { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
-        
         .modal-btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .modal-btn-primary { background-color: #1DA1F2; color: white; }
         .modal-btn-secondary { background-color: #6c757d; color: white; }
 
-        .preview-container { margin: 20px 0; border: 1px solid #ddd; border-radius: 8px; padding: 15px; background-color: #f9f9f9; display: flex; flex-direction: column; align-items: center; }
-        .preview-title { font-weight: bold; margin-bottom: 10px; color: #333; text-align: center; }
-        .preview-image-container { max-width: 100%; overflow: auto; display: flex; justify-content: center; }
-        .preview-image { max-width: 100%; border: 1px solid #ddd; border-radius: 4px; }
-        
-        .instructions { background-color: #f0f8ff; border-left: 4px solid #1DA1F2; padding: 15px; margin: 20px 0; text-align: left; border-radius: 4px; }
-        .instructions h3 { margin-top: 0; color: #1DA1F2; }
-        .instructions ol { padding-left: 20px; margin: 0; }
-        .instructions li { margin-bottom: 10px; }
-
-        /* ALTERAÇÃO AQUI: Removido text-transform: uppercase */
         .custom-title { text-align: center; color: var(--cor-titulo); margin-bottom: 15px; font-family: 'Indie Flower', cursive; font-weight: 700; font-size: 2.5em; width: 100%; outline: none; word-wrap: break-word; }
-        
         .custom-footer { text-align: center; color: var(--cor-assinatura); font-weight: 400; font-family: 'Indie Flower', cursive; margin-top: 10px; width: 100%; outline: none; font-size: 1.2em; word-wrap: break-word; }
 
-        .info-box { position: fixed; bottom: 70px; right: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; max-width: 300px; display: none; }
-        .info-box.show { display: block; }
         .chat-icon-container { position: fixed; bottom: 20px; right: 20px; z-index: 1010; cursor: pointer; }
         .chat-icon { width: 60px; height: 60px; background-color: var(--site-btn-bg); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .notification-badge { position: absolute; top: -5px; right: -5px; width: 22px; height: 22px; background-color: red; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border: 2px solid white; }
         .notification-badge.visible { display: flex; }
-        .vibrating { animation: vibrate 1s ease-out infinite; }
-        @keyframes vibrate { 0%, 30%, 100% { transform: translate(0, 0) rotate(0); } 5% { transform: translate(-2px, -2px) rotate(-2deg); } 10% { transform: translate(2px, 2px) rotate(2deg); } 15% { transform: translate(-2px, 2px) rotate(-2deg); } 20% { transform: translate(2px, -2px) rotate(2deg); } 25% { transform: translate(0, 0) rotate(0); } }
         .chat-box { position: fixed; bottom: 100px; right: 20px; width: 350px; max-width: 90vw; background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; z-index: 1009; opacity: 0; transform: scale(0.9) translateY(10px); transform-origin: bottom right; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; }
         .chat-box.show { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
         .chat-header { background-color: var(--site-btn-bg); color: white; padding: 15px; font-weight: bold; }
         .chat-messages { padding: 15px; height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .message { padding: 10px 15px; border-radius: 18px; max-width: 80%; line-height: 1.4; word-wrap: break-word; }
+        .message { padding: 10px 15px; border-radius: 18px; max-width: 80%; line-height: 1.4; word-wrap: break-word; font-family: sans-serif; }
         .message.bot { background-color: #f1f0f0; border-bottom-left-radius: 4px; align-self: flex-start; }
         .message.user { background-color: #e0ccff; color: #333; border-bottom-right-radius: 4px; align-self: flex-end; }
         .chat-replies { padding: 15px; border-top: 1px solid #eee; display: flex; flex-direction: column; gap: 8px; }
         .chat-reply-btn { background: #f9f9f9; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; text-align: left; }
-        .chat-reply-btn:hover { background-color: #f0e6ff; border-color: var(--site-btn-bg); }
-        .loading { display: none; text-align: center; padding: 20px; }
-        .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid #1DA1F2; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 0 auto 15px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -377,7 +315,6 @@
     </header>
 
     <div class="main-layout">
-        
         <div class="sidebar-container" id="sidebar">
             <button class="btn-toggle-sidebar" onclick="toggleSidebar()">
                 <i class="fas fa-chevron-left"></i> Ocultar Menu
@@ -420,20 +357,28 @@
             </div>
         </div>
 
-        <!-- ÁREA DE CONTEÚDO (DIREITA) -->
         <div class="content-area">
-            
-            <!-- BOTÃO FLUTUANTE PARA MOSTRAR MENU -->
-            <button id="showMenuBtn" class="btn-show-sidebar" onclick="toggleSidebar()" title="Mostrar Menu">
-                <i class="fas fa-bars"></i>
-            </button>
+            <button id="showMenuBtn" class="btn-show-sidebar" onclick="toggleSidebar()" title="Mostrar Menu"><i class="fas fa-bars"></i></button>
 
             <div id="customTitle" class="custom-title" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Sua Tabela</div>
             
             <div class="table-wrapper" id="tableWrapper">
                 <table id="editableTable" class="special-header striped-rows">
-                    <thead><tr><th class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 1</th><th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 2</th><th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 3</th><th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 4</th><th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 5</th></tr></thead>
-                    <tbody><tr><td class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 1 Col 1</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 1 Col 2</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 1 Col 3</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 1 Col 4</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 1 Col 5</td></tr><tr><td class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 2 Col 1</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 2 Col 2</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 2 Col 3</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 2 Col 4</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 2 Col 5</td></tr><tr><td class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 3 Col 1</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 3 Col 2</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 3 Col 3</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 3 Col 4</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 3 Col 5</td></tr></tbody>
+                    <thead>
+                        <tr>
+                            <th class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 1</th>
+                            <th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 2</th>
+                            <th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 3</th>
+                            <th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 4</th>
+                            <th contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Cabeçalho 5</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 1 Col 1</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td></tr>
+                        <tr><td class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 2 Col 1</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td></tr>
+                        <tr><td class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 3 Col 1</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td></tr>
+                        <tr><td class="col-first" contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Linha 4 Col 1</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td><td contenteditable="true" spellcheck="false" onpaste="pasteTextOnly(event)">Conteúdo</td></tr>
+                    </tbody>
                 </table>
                 <div id="mergeOverlay" class="merge-overlay">
                     <div class="merge-grid">
@@ -453,8 +398,8 @@
                 <button class="btn-action" onclick="removeRow()"><i class="fas fa-minus"></i> Remover Linha</button>
                 <button class="btn-action" onclick="removeColumn()"><i class="fas fa-minus"></i> Remover Coluna</button>
                 <button class="btn-action btn-undo" onclick="undoMerge()"><i class="fas fa-undo"></i> Desfazer Mescla</button>
-                <button class="btn-action" onclick="togglePrintMode()"><i class="fas fa-camera"></i> Hora do Print</button>
-                <button class="btn-action wide" onclick="openShareModal()"><i class="fab fa-twitter"></i> Compartilhar no X</button>
+                <button class="btn-action btn-print" onclick="togglePrintMode()"><i class="fas fa-camera"></i> Hora do Print</button>
+                <button class="btn-action btn-share-x wide" onclick="openShareModal()"><i class="fab fa-twitter"></i> Compartilhar no X</button>
             </div>
         </div>
     </div>
@@ -462,57 +407,18 @@
     <button class="btn-back" id="backButton" onclick="togglePrintMode()"><i class="fas fa-arrow-left"></i> Voltar</button>
     <button class="btn-info" id="infoButton" onclick="toggleInfo()"><i class="fas fa-info-circle"></i></button>
 
-    <div class="info-box" id="infoBox">
-        <p><strong>Para tirar um print pelo computador:</strong></p>
-        <p>Pressione: <kbd>Windows + Shift + S</kbd> e selecione a área desejada.</p>
-        <p><strong>Dica Extra:</strong> Segure o clique em uma célula para mesclar!</p>
-    </div>
-
-    <!-- Modal para compartilhar no X -->
     <div id="shareModal" class="modal">
         <div class="modal-content">
-            <h2>Compartilhar sua Tabela no X</h2>
-            
-            <div class="loading" id="loadingIndicator">
-                <div class="loading-spinner"></div>
-                <p>Gerando imagem da sua tabela...</p>
-            </div>
-            
+            <h2>Compartilhar no X</h2>
+            <div class="loading" id="loadingIndicator"><div class="loading-spinner"></div><p>Gerando imagem...</p></div>
             <div id="shareContent" style="display: none;">
-                <div class="preview-container">
-                    <div class="preview-title">Prévia da sua tabela:</div>
-                    <div class="preview-image-container">
-                        <img id="tablePreview" class="preview-image" alt="Prévia da tabela">
-                    </div>
-                </div>
-                
-                <div class="instructions">
-                    <h3>Como compartilhar sua tabela no X:</h3>
-                    <ol>
-                        <li>Clique em "Copiar Texto" para copiar a mensagem</li>
-                        <li>Clique em "Baixar Imagem" para salvar a tabela</li>
-                        <li>Abra o X (Twitter) e crie um novo post</li>
-                        <li>Cole o texto (Ctrl+V) e faça upload da imagem</li>
-                        <li>Ou clique em "Abrir X" para ir diretamente</li>
-                    </ol>
-                </div>
-                
-                <p>Texto para compartilhar:</p>
-                <textarea id="tweetText">Minha tabela personalizada! ✨ Fiz usando o site da @studies_lala: https://priprincesa26.github.io/fa-asuatabela/</textarea>
-                
+                <div class="preview-container"><img id="tablePreview" class="preview-image" alt="Prévia"></div>
+                <textarea id="tweetText"></textarea>
                 <div class="modal-actions">
-                    <button class="modal-btn modal-btn-primary" onclick="copyText()">
-                        <i class="fas fa-copy"></i> Copiar Texto
-                    </button>
-                    <button class="modal-btn modal-btn-primary" onclick="downloadImage()">
-                        <i class="fas fa-download"></i> Baixar Imagem
-                    </button>
-                    <button class="modal-btn modal-btn-primary" onclick="openTwitter()">
-                        <i class="fab fa-twitter"></i> Abrir X
-                    </button>
-                    <button class="modal-btn modal-btn-secondary" onclick="closeShareModal()">
-                        <i class="fas fa-times"></i> Fechar
-                    </button>
+                    <button class="modal-btn modal-btn-primary" onclick="copyText()">Copiar Texto</button>
+                    <button class="modal-btn modal-btn-primary" onclick="downloadImage()">Baixar Imagem</button>
+                    <button class="modal-btn modal-btn-primary" onclick="openTwitter()">Abrir X</button>
+                    <button class="modal-btn modal-btn-secondary" onclick="closeShareModal()">Fechar</button>
                 </div>
             </div>
         </div>
@@ -533,19 +439,18 @@
             doceLavanda: { bgPage: '#F5EBFF', bgCells: '#F8F2FF', borderColor: '#4B0082', textColor: '#4A2568', titleColor: '#4A2568', footerColor: '#9370DB', headerBgColor: '#9370DB', headerTextColor: '#FFFFFF', stripedColor: '#e6d6ff', fontFamily: "'Comic Neue', cursive" },
             florestaEncantada: { bgPage: '#f0fff0', bgCells: '#fafffa', borderColor: '#006400', textColor: '#2f4f4f', titleColor: '#2e8b57', footerColor: '#2e8b57', headerBgColor: '#2e8b57', headerTextColor: '#ffffff', stripedColor: '#E8F5E9', fontFamily: "'Architects Daughter', cursive" },
             cadernoClassico: { bgPage: '#fdf5e6', bgCells: '#fffaf0', borderColor: '#8b4513', textColor: '#696969', titleColor: '#8b4513', footerColor: '#a0522d', headerBgColor: '#d2b48c', headerTextColor: '#4d3a24', stripedColor: '#F5F5DC', fontFamily: "'Georgia', serif" },
-            brisaDoMar: { bgPage: '#e0f7fa', bgCells: '#ffffff', borderColor: '#0077c2', textColor: '#004d7a', titleColor: '#0288d1', footerColor: '#0288d1', headerBgColor: '#4fc3f7', headerTextColor: '#ffffff', stripedColor: '#E1F5FE', fontFamily: "'Quicksand', sans-serif" },
+            brisaDoMar: { bgPage: '#0A1A2F', bgCells: '#122B43', borderColor: '#0077CC', textColor: '#E0F2FF', titleColor: '#4DA6FF', footerColor: '#66B3FF', headerBgColor: '#005A9E', headerTextColor: '#FFFFFF', stripedColor: '#1A365D', fontFamily: "Arial, sans-serif" },
             cinzaMinimalista: { bgPage: '#f5f5f5', bgCells: '#ffffff', borderColor: '#616161', textColor: '#212121', titleColor: '#424242', footerColor: '#757575', headerBgColor: '#bdbdbd', headerTextColor: '#000000', stripedColor: '#EEEEEE', fontFamily: "'Arial', sans-serif" },
             ceuEstrelado: { bgPage: '#0d1b2a', bgCells: '#1b263b', borderColor: '#778da9', textColor: '#e0e1dd', titleColor: '#ffffff', footerColor: '#778da9', headerBgColor: '#415a77', headerTextColor: '#ffffff', stripedColor: '#2a3f5d', fontFamily: "'Quicksand', sans-serif" },
             jardimSecreto: { bgPage: '#f0fff4', bgCells: '#e6f5e9', borderColor: '#2e8b57', textColor: '#2f4f4f', titleColor: '#3cb371', footerColor: '#3cb371', headerBgColor: '#66cdaa', headerTextColor: '#003311', stripedColor: '#D1FAE5', fontFamily: "'Dancing Script', cursive" },
             oceanoProfundo: { bgPage: '#0a192f', bgCells: '#112240', borderColor: '#64ffda', textColor: '#ccd6f6', titleColor: '#ffffff', footerColor: '#64ffda', headerBgColor: '#173a5e', headerTextColor: '#64ffda', stripedColor: '#0f2d52', fontFamily: "'Courier New', monospace" },
-            terracotaSol: { bgPage: '#fffaf0', bgCells: '#fdf5e6', borderColor: '#c89f9c', textColor: '#7d5a5a', titleColor: '#a0522d', footerColor: '#a0522d', headerBgColor: '#e57373', headerTextColor: '#ffffff', stripedColor: '#FAEBD7', fontFamily: "'Georgia', serif" },
-            grafiteAmarelo: { bgPage: '#212121', bgCells: '#323232', borderColor: '#616161', textColor: '#f5f5f5', titleColor: '#ffd600', footerColor: '#f5f5f5', headerBgColor: '#ffd600', headerTextColor: '#000000', stripedColor: '#424242', fontFamily: "'Trebuchet MS', sans-serif" },
+            terracotaSol: { bgPage: '#fcef9c', bgCells: '#fcef9c', borderColor: '#3f1719', textColor: '#680a1d', titleColor: '#680a1d', footerColor: '#ba2339', headerBgColor: '#ba2339', headerTextColor: '#fcef9c', stripedColor: '#e8b666', fontFamily: "Arial, sans-serif" },
+            grafiteAmarelo: { bgPage: '#00332a', bgCells: '#000000', borderColor: '#00FFAA', textColor: '#E6E6FA', titleColor: '#FFFFFF', footerColor: '#FFFFFF', headerBgColor: '#00AA77', headerTextColor: '#FFFFFF', stripedColor: 'rgba(0, 170, 119, 0.25)', fontFamily: "Arial, sans-serif" },
             rosaCereja: { bgPage: '#FFF0F5', bgCells: '#FFFFFF', borderColor: '#C2185B', textColor: '#880E4F', titleColor: '#C2185B', footerColor: '#F48FB1', headerBgColor: '#F48FB1', headerTextColor: '#FFFFFF', stripedColor: '#FCE4EC', fontFamily: "'Indie Flower', cursive" },
             docePastel: { bgPage: '#e0f7fa', bgCells: '#ffffff', borderColor: '#f48fb1', textColor: '#ad1457', titleColor: '#d81b60', footerColor: '#f48fb1', headerBgColor: '#f48fb1', headerTextColor: '#ffffff', stripedColor: '#fce4ec', fontFamily: "'Comic Neue', cursive" },
-            mentaSuave: { bgPage: '#f0fdf4', bgCells: '#ffffff', borderColor: '#4ade80', textColor: '#14532d', titleColor: '#16a34a', footerColor: '#16a34a', headerBgColor: '#86efac', headerTextColor: '#064e3b', stripedColor: '#dcfce7', fontFamily: "'Architects Daughter', cursive" },
+            mentaSuave: { bgPage: '#fff5f7', bgCells: '#ffffff', borderColor: '#bbb', textColor: '#333', titleColor: '#d23669', footerColor: '#d23669', headerBgColor: '#ffb6c1', headerTextColor: '#000000', stripedColor: '#f0f0f0', fontFamily: "'Comic Neue', cursive" },
         };
 
-        // HISTÓRICO DE AÇÕES PARA DESFAZER
         let historyStack = [];
 
         function saveState() {
@@ -557,16 +462,11 @@
         }
 
         function undoMerge() {
-            if (historyStack.length === 0) {
-                alert("Não há ações recentes para desfazer!");
-                return;
-            }
+            if (historyStack.length === 0) return;
             const lastState = historyStack.pop();
             const table = document.getElementById('editableTable');
             table.querySelector('thead').innerHTML = lastState.thead;
             table.querySelector('tbody').innerHTML = lastState.tbody;
-            
-            // Reaplicar estilos e lógicas necessárias
             updateFirstColumnStyles(); 
             applyStyles(); 
         }
@@ -574,44 +474,36 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const btn = document.getElementById('showMenuBtn');
-            const toggleIcon = sidebar.querySelector('.btn-toggle-sidebar i');
-            
             sidebar.classList.toggle('collapsed');
-            
-            if (sidebar.classList.contains('collapsed')) {
-                btn.style.display = 'flex';
-            } else {
-                btn.style.display = 'none';
-                if (window.innerWidth < 900) {
-                    toggleIcon.className = 'fas fa-chevron-up';
-                } else {
-                    toggleIcon.className = 'fas fa-chevron-left';
-                }
-            }
+            btn.style.display = sidebar.classList.contains('collapsed') ? 'flex' : 'none';
         }
 
         function applyPreset(presetName) {
             const preset = presets[presetName];
-            if (!preset) return;
+            const table = document.getElementById('editableTable');
+            if (presetName === 'mentaSuave') table.classList.add('jane-austen-mode');
+            else table.classList.remove('jane-austen-mode');
+
             Object.keys(preset).forEach(key => {
                 const element = document.getElementById(key);
                 if (element) {
                     element.value = preset[key];
-                    if (element.type === 'color') updateColorDisplay(element);
+                    if (element.type === 'color') {
+                        document.getElementById(key + 'Code').textContent = element.value;
+                        document.getElementById(key + 'Preview').style.backgroundColor = element.value;
+                    }
                 }
             });
             applyStyles();
         }
+
         function pasteTextOnly(event) { event.preventDefault(); const text = (event.clipboardData || window.clipboardData).getData('text/plain'); document.execCommand('insertText', false, text); }
         function updateColorDisplay(input) { document.getElementById(input.id + 'Code').textContent = input.value; document.getElementById(input.id + 'Preview').style.backgroundColor = input.value; applyStyles(); }
-        
-        function toggleStripedOptions() {
-            const isChecked = document.getElementById('stripedRows').checked;
-            document.getElementById('stripedColorGroup').style.display = isChecked ? 'block' : 'none';
-            applyStyles();
-        }
+        function toggleStripedOptions() { document.getElementById('stripedColorGroup').style.display = document.getElementById('stripedRows').checked ? 'block' : 'none'; applyStyles(); }
         
         function applyStyles() {
+            const fontFamily = document.getElementById('fontFamily').value;
+            document.documentElement.style.setProperty('--fonte-tabela', fontFamily);
             document.documentElement.style.setProperty('--cor-fundo-pagina', document.getElementById('bgPage').value);
             document.documentElement.style.setProperty('--cor-fundo-tabela', document.getElementById('bgCells').value);
             document.documentElement.style.setProperty('--cor-divisorias', document.getElementById('borderColor').value);
@@ -627,9 +519,7 @@
             document.documentElement.style.setProperty('--site-header-text', headerText);
             document.documentElement.style.setProperty('--site-btn-bg', headerBg);
             
-            const fontFamily = document.getElementById('fontFamily').value;
-            document.documentElement.style.setProperty('--fonte-tabela', fontFamily);
-            document.querySelectorAll('th, td, .custom-title, .custom-footer').forEach(element => { element.style.fontFamily = fontFamily; });
+            document.querySelectorAll('th, td, .custom-title, .custom-footer, table, body').forEach(el => { el.style.fontFamily = fontFamily; });
             
             const table = document.getElementById('editableTable');
             const stripedRows = document.getElementById('stripedRows').checked;
@@ -643,26 +533,39 @@
                 style.id = 'custom-striped-style';
                 style.textContent = `.striped-rows tr:nth-child(even) td:not(.col-first) { background-color: ${stripedColor} !important; }`;
                 document.head.appendChild(style);
-            } else {
-                table.classList.remove('striped-rows');
-            }
+            } else { table.classList.remove('striped-rows'); }
         }
-        function addRow() { const tbody = document.querySelector('#editableTable tbody'); const columns = document.querySelector('#editableTable thead tr').cells.length; const newRow = tbody.insertRow(); for (let i = 0; i < columns; i++) { const cell = newRow.insertCell(); cell.contentEditable = true; cell.spellcheck = false; cell.onpaste = pasteTextOnly; cell.style.fontFamily = document.getElementById('fontFamily').value; cell.textContent = (i === 0) ? `Nova Linha` : `Conteúdo`; } updateFirstColumnStyles(); applyStyles(); }
-        function addColumn() { const headerRow = document.querySelector('#editableTable thead tr'); const bodyRows = document.querySelectorAll('#editableTable tbody tr'); const newColIndex = headerRow.cells.length; const newHeaderCell = document.createElement('th'); newHeaderCell.contentEditable = true; newHeaderCell.spellcheck = false; newHeaderCell.onpaste = pasteTextOnly; newHeaderCell.style.fontFamily = document.getElementById('fontFamily').value; newHeaderCell.textContent = `Cabeçalho ${newColIndex+1}`; headerRow.appendChild(newHeaderCell); bodyRows.forEach(row => { const newCell = row.insertCell(); newCell.contentEditable = true; newCell.spellcheck = false; newCell.onpaste = pasteTextOnly; newCell.style.fontFamily = document.getElementById('fontFamily').value; newCell.textContent = `Conteúdo`; }); updateFirstColumnStyles(); applyStyles(); }
-        function removeRow() { const tbody = document.querySelector('#editableTable tbody'); if (tbody.rows.length > 1) { tbody.deleteRow(-1); } updateFirstColumnStyles(); }
-        function removeColumn() { const headerRow = document.querySelector('#editableTable thead tr'); if (headerRow.cells.length > 1) { const bodyRows = document.querySelectorAll('#editableTable tbody tr'); headerRow.deleteCell(-1); bodyRows.forEach(row => row.deleteCell(-1)); } updateFirstColumnStyles(); }
+
+        function addRow() { 
+            const tbody = document.querySelector('#editableTable tbody'); 
+            const columns = document.querySelector('#editableTable thead tr').cells.length; 
+            const newRow = tbody.insertRow(); 
+            for (let i = 0; i < columns; i++) { 
+                const cell = newRow.insertCell(); cell.contentEditable = true; cell.spellcheck = false; cell.onpaste = pasteTextOnly; 
+                cell.textContent = (i === 0) ? `Nova Linha` : `Conteúdo`; 
+            } 
+            updateFirstColumnStyles(); applyStyles(); 
+        }
+
+        function addColumn() { 
+            const headerRow = document.querySelector('#editableTable thead tr'); 
+            const bodyRows = document.querySelectorAll('#editableTable tbody tr'); 
+            const newHeaderCell = document.createElement('th'); newHeaderCell.contentEditable = true; 
+            newHeaderCell.textContent = `Cabeçalho ${headerRow.cells.length + 1}`; 
+            headerRow.appendChild(newHeaderCell); 
+            bodyRows.forEach(row => { const newCell = row.insertCell(); newCell.contentEditable = true; newCell.textContent = `Conteúdo`; }); 
+            updateFirstColumnStyles(); applyStyles(); 
+        }
+
+        function removeRow() { if (document.querySelector('#editableTable tbody').rows.length > 1) document.querySelector('#editableTable tbody').deleteRow(-1); updateFirstColumnStyles(); }
+        function removeColumn() { if (document.querySelector('#editableTable thead tr').cells.length > 1) { document.querySelector('#editableTable thead tr').deleteCell(-1); document.querySelectorAll('#editableTable tbody tr').forEach(row => row.deleteCell(-1)); } updateFirstColumnStyles(); }
         function toggleTitle() { document.getElementById('customTitle').style.display = document.getElementById('hasTitle').checked ? 'block' : 'none'; }
         function toggleFooter() { document.getElementById('customFooter').style.display = document.getElementById('hasFooter').checked ? 'block' : 'none'; }
         
         function updateFirstColumnStyles() {
             const grid = mapTableGrid();
-            const allCells = document.querySelectorAll('#editableTable td, #editableTable th');
-            allCells.forEach(cell => cell.classList.remove('col-first'));
-            for (let r = 0; r < grid.length; r++) {
-                if (grid[r][0] && grid[r][0].element) {
-                    grid[r][0].element.classList.add('col-first');
-                }
-            }
+            document.querySelectorAll('#editableTable td, #editableTable th').forEach(cell => cell.classList.remove('col-first'));
+            for (let r = 0; r < grid.length; r++) { if (grid[r][0] && grid[r][0].element) grid[r][0].element.classList.add('col-first'); }
         }
 
         let longPressTimer;
@@ -673,26 +576,17 @@
         const table = document.getElementById('editableTable');
         
         function mapTableGrid() {
-            const grid = [];
-            const rows = table.rows;
-            for (let r = 0; r < rows.length; r++) { if (!grid[r]) grid[r] = []; }
+            const grid = []; const rows = table.rows;
+            for (let r = 0; r < rows.length; r++) if (!grid[r]) grid[r] = [];
             for (let r = 0; r < rows.length; r++) {
-                const row = rows[r];
-                let colIndex = 0;
+                const row = rows[r]; let colIndex = 0;
                 for (let c = 0; c < row.cells.length; c++) {
-                    const cell = row.cells[c];
-                    while (grid[r][colIndex]) colIndex++;
+                    const cell = row.cells[c]; while (grid[r][colIndex]) colIndex++;
                     const cellInfo = { element: cell, r: r, c: colIndex, rowSpan: cell.rowSpan, colSpan: cell.colSpan };
-                    for (let rs = 0; rs < cell.rowSpan; rs++) {
-                        for (let cs = 0; cs < cell.colSpan; cs++) {
-                            if (!grid[r + rs]) grid[r + rs] = [];
-                            grid[r + rs][colIndex + cs] = cellInfo;
-                        }
-                    }
+                    for (let rs = 0; rs < cell.rowSpan; rs++) { for (let cs = 0; cs < cell.colSpan; cs++) { if (!grid[r + rs]) grid[r + rs] = []; grid[r + rs][colIndex + cs] = cellInfo; } }
                     colIndex += cell.colSpan;
                 }
-            }
-            return grid;
+            } return grid;
         }
 
         table.addEventListener('mousedown', startLongPress);
@@ -707,64 +601,25 @@
         });
 
         function startLongPress(e) {
-            const cell = e.target.closest('th, td');
-            if (!cell) return;
-            if (cell.parentElement.rowIndex === 0 && cell.cellIndex === 0) return;
+            const cell = e.target.closest('th, td'); if (!cell) return;
             longPressTimer = setTimeout(() => { showMergeUI(cell); ignoreNextClick = true; }, 500); 
         }
         function cancelLongPress() { clearTimeout(longPressTimer); }
 
         function showMergeUI(cell) {
-            selectedMergeCell = cell;
-            isMergeMenuOpen = true;
-            const rect = cell.getBoundingClientRect();
-            const containerRect = document.querySelector('.table-wrapper').getBoundingClientRect();
+            selectedMergeCell = cell; isMergeMenuOpen = true;
+            const rect = cell.getBoundingClientRect(); const containerRect = document.querySelector('.table-wrapper').getBoundingClientRect();
             const scrollLeft = document.querySelector('.table-wrapper').scrollLeft;
-            
-            const top = (rect.top - containerRect.top) + (rect.height / 2) - 60; 
-            const left = (rect.left - containerRect.left) + scrollLeft + (rect.width / 2) - 60; 
-            
-            mergeOverlay.style.top = `${top}px`;
-            mergeOverlay.style.left = `${left}px`;
+            mergeOverlay.style.top = `${(rect.top - containerRect.top) + (rect.height / 2) - 60}px`;
+            mergeOverlay.style.left = `${(rect.left - containerRect.left) + scrollLeft + (rect.width / 2) - 60}px`;
             mergeOverlay.style.display = 'flex';
-
-            const grid = mapTableGrid();
-            let currentGridCell = null;
-            for(let r=0; r<grid.length; r++) {
-                for(let c=0; c<grid[r].length; c++) {
-                    if (grid[r][c] && grid[r][c].element === cell) { currentGridCell = grid[r][c]; break; }
-                }
-                if (currentGridCell) break;
-            }
-            if (!currentGridCell) return;
-            const r = currentGridCell.r;
-            const c = currentGridCell.c;
-            const btnUp = mergeOverlay.querySelector('.up');
-            const btnDown = mergeOverlay.querySelector('.down');
-            const btnLeft = mergeOverlay.querySelector('.left');
-            const btnRight = mergeOverlay.querySelector('.right');
-            btnUp.style.visibility = 'visible'; btnDown.style.visibility = 'visible'; btnLeft.style.visibility = 'visible'; btnRight.style.visibility = 'visible';
-
-            if (r === 0 && c > 0) { const ln = grid[r][c-1]; if (ln && ln.r === 0 && ln.c === 0) btnLeft.style.visibility = 'hidden'; }
-            if (c === 0 && r > 0) { const un = grid[r-1][c]; if (un && un.r === 0 && un.c === 0) btnUp.style.visibility = 'hidden'; }
-            if (r === 0) { btnDown.style.visibility = 'hidden'; btnUp.style.visibility = 'hidden'; }
-            if (r === 1) btnUp.style.visibility = 'hidden';
-            if (c === 0) { btnRight.style.visibility = 'hidden'; btnLeft.style.visibility = 'hidden'; }
-            if (c === 1) btnLeft.style.visibility = 'hidden';
         }
 
         function hideMergeUI() { mergeOverlay.style.display = 'none'; selectedMergeCell = null; isMergeMenuOpen = false; }
 
         function executeMerge(direction) {
             if (!selectedMergeCell) return;
-
-            // SALVAR ESTADO ANTES DA MESCLA
-            saveState();
-
-            const stripedCheck = document.getElementById('stripedRows');
-            if (!stripedCheck.disabled) { stripedCheck.checked = false; stripedCheck.disabled = true; toggleStripedOptions(); }
-            const grid = mapTableGrid();
-            let cellInfo = null;
+            saveState(); const grid = mapTableGrid(); let cellInfo = null;
             for(let r=0; r<grid.length; r++) { for(let c=0; c<grid[r].length; c++) { if (grid[r][c] && grid[r][c].element === selectedMergeCell) { cellInfo = grid[r][c]; break; } } if (cellInfo) break; }
             if (!cellInfo) return;
             let neighbor = null;
@@ -779,118 +634,50 @@
 
         let tableImageDataUrl = '';
         function togglePrintMode() { document.body.classList.toggle('print-mode'); }
-        function toggleInfo() { document.getElementById('infoBox').classList.toggle('show'); }
+        function toggleInfo() { alert("Use Alt+PrintScreen ou Windows+Shift+S para printar a área!"); }
 
         function openShareModal() {
-            const modal = document.getElementById('shareModal');
-            modal.style.display = 'flex';
-            document.getElementById('loadingIndicator').style.display = 'block';
-            document.getElementById('shareContent').style.display = 'none';
-
+            const modal = document.getElementById('shareModal'); modal.style.display = 'flex';
+            document.getElementById('loadingIndicator').style.display = 'block'; document.getElementById('shareContent').style.display = 'none';
             captureTableImage().then(() => {
-                document.getElementById('loadingIndicator').style.display = 'none';
-                document.getElementById('shareContent').style.display = 'block';
-                const title = document.getElementById('customTitle').innerText;
-                document.getElementById('tweetText').value = `Minha tabela "${title}"! ✨ Fiz usando o site da @studies_lala: https://priprincesa26.github.io/fa-asuatabela/`;
-            }).catch(err => { alert("Erro ao gerar imagem."); closeShareModal(); });
+                document.getElementById('loadingIndicator').style.display = 'none'; document.getElementById('shareContent').style.display = 'block';
+                document.getElementById('tweetText').value = `Minha tabela personalizada! ✨ Fiz usando o site da @studies_lala: https://priprincesa26.github.io/fa-asuatabela/`;
+            });
         }
 
         function captureTableImage() {
-            return new Promise((resolve, reject) => {
-                const titleEl = document.getElementById('customTitle');
-                const tableWrapperEl = document.getElementById('tableWrapper'); 
-                const footerEl = document.getElementById('customFooter');
-                const overlay = document.getElementById('mergeOverlay');
-                
-                const originalOverlayDisplay = overlay.style.display;
-                overlay.style.display = 'none';
-
-                const captureContainer = document.createElement('div');
+            return new Promise((resolve) => {
+                const titleEl = document.getElementById('customTitle'); const tableWrapperEl = document.getElementById('tableWrapper'); 
+                const footerEl = document.getElementById('customFooter'); const captureContainer = document.createElement('div');
                 document.body.appendChild(captureContainer);
-                
-                Object.assign(captureContainer.style, { 
-                    position: 'absolute', 
-                    left: '-9999px', 
-                    padding: '20px', 
-                    background: getComputedStyle(document.documentElement).getPropertyValue('--cor-fundo-pagina'), 
-                    display: 'inline-block',
-                    width: 'auto' 
-                });
-                
+                Object.assign(captureContainer.style, { position: 'absolute', left: '-9999px', padding: '20px', background: getComputedStyle(document.documentElement).getPropertyValue('--cor-fundo-pagina'), display: 'inline-block', width: 'auto' });
                 if (document.getElementById('hasTitle').checked) captureContainer.appendChild(titleEl.cloneNode(true));
-                
-                const tableEl = tableWrapperEl.querySelector('table');
-                const tableClone = tableEl.cloneNode(true);
-                captureContainer.appendChild(tableClone);
-                
+                captureContainer.appendChild(tableWrapperEl.querySelector('table').cloneNode(true));
                 if (document.getElementById('hasFooter').checked) captureContainer.appendChild(footerEl.cloneNode(true));
-
-                html2canvas(captureContainer, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
-                    tableImageDataUrl = canvas.toDataURL('image/png');
-                    const previewImg = document.getElementById('tablePreview');
-                    if(previewImg) previewImg.src = tableImageDataUrl;
-                    document.body.removeChild(captureContainer);
-                    overlay.style.display = originalOverlayDisplay; 
-                    resolve();
-                }).catch((err) => { overlay.style.display = originalOverlayDisplay; reject(err); });
+                html2canvas(captureContainer, { scale: 2, useCORS: true }).then(canvas => {
+                    tableImageDataUrl = canvas.toDataURL('image/png'); document.getElementById('tablePreview').src = tableImageDataUrl;
+                    document.body.removeChild(captureContainer); resolve();
+                });
             });
         }
 
         function closeShareModal() { document.getElementById('shareModal').style.display = 'none'; }
-        function downloadImage() { if (!tableImageDataUrl) return; const link = document.createElement('a'); const title = document.getElementById('customTitle').innerText || 'minha-tabela'; link.download = `${title.toLowerCase().replace(/\s+/g, '-')}.png`; link.href = tableImageDataUrl; document.body.appendChild(link); link.click(); document.body.removeChild(link); }
-        function copyText() { const textarea = document.getElementById('tweetText'); textarea.select(); try { document.execCommand('copy'); alert('Texto copiado!'); } catch (err) { alert('Erro ao copiar texto.'); } }
+        function downloadImage() { const link = document.createElement('a'); link.download = 'tabela-lala.png'; link.href = tableImageDataUrl; link.click(); }
+        function copyText() { const textarea = document.getElementById('tweetText'); textarea.select(); document.execCommand('copy'); alert('Texto copiado!'); }
+        function openTwitter() { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(document.getElementById('tweetText').value)}`, '_blank'); }
+
+        function toggleChat() { document.getElementById('chatBox').classList.toggle('show'); document.getElementById('chatNotification').classList.remove('visible'); }
+        function addMessage(text, sender = 'bot') { const msg = document.createElement('div'); msg.className = `message ${sender}`; msg.innerHTML = text; document.getElementById('chatMessages').appendChild(msg); }
         
-        // Função para Abrir o X
-        function openTwitter() {
-            const tweetText = encodeURIComponent(document.getElementById('tweetText').value);
-            const url = `https://twitter.com/intent/tweet?text=${tweetText}`;
-            window.open(url, '_blank');
-        }
-
-        const chatBox = document.getElementById('chatBox');
-        const chatIconContainer = document.getElementById('chatIconContainer');
-        const chatNotification = document.getElementById('chatNotification');
-        const chatMessages = document.getElementById('chatMessages');
-        const chatReplies = document.getElementById('chatReplies');
-        let notificationTimer;
-
-        function showNotification() { chatNotification.classList.add('visible'); chatIconContainer.classList.add('vibrating'); }
-        function toggleChat() { chatBox.classList.toggle('show'); if (chatBox.classList.contains('show')) { chatNotification.classList.remove('visible'); chatIconContainer.classList.remove('vibrating'); } }
-        function addMessage(text, sender = 'bot') { const messageDiv = document.createElement('div'); messageDiv.className = `message ${sender}`; messageDiv.innerHTML = text; chatMessages.appendChild(messageDiv); chatMessages.scrollTop = chatMessages.scrollHeight; }
-        function showInitialReplies() { chatReplies.innerHTML = `<button class="chat-reply-btn" onclick="handleReply(this)">Uau, que demais! Vou aproveitar agora</button><button class="chat-reply-btn" onclick="handleReply(this)">Agradeço, mas vou deixar passar (por enquanto...)</button><button class="chat-reply-btn" onclick="handleReply(this)">Amei! Tem outros cupons?</button>`; }
-        
-        function handleReply(button) { 
-            const replyText = button.innerText; 
-            addMessage(replyText, 'user'); 
-            chatReplies.innerHTML = ''; 
-            setTimeout(() => { 
-                if (replyText.includes("outros cupons")) { 
-                    addMessage('Sim! 🧡<br>Eu tenho outros cupons disponíveis, e você pode encontrar todos eles no meu Linktree:<br>👉 <a href="https://linktr.ee/lalatears" target="_blank">https://linktr.ee/lalatears</a><br><br>Fique à vontade para conferir e aproveitar os descontos!'); 
-                } else if (replyText.includes("aproveitar agora")) { 
-                    addMessage("Perfeito! Não se esqueça de usar o cupom <strong>LALAVEST</strong> no site <a href='https://discursivas.com' target='_blank'>discursivas.com</a>. Boas compras!"); 
-                } else { 
-                    addMessage("Sem problemas! Fica para a próxima. 😉"); 
-                } 
-            }, 800); 
-        }
-        function startChatFlow() { 
-            chatMessages.innerHTML = ''; 
-            chatReplies.innerHTML = ''; 
-            addMessage('Eu tenho um cupom exclusivo que garante um desconto especial na compra de cursos de matérias isoladas para pré-vestibular no site Discursivas!<br><br>É só acessar <a href="https://discursivas.com" target="_blank">discursivas.com</a> e aplicar o cupom <strong>LALAVEST</strong> na finalização da compra. Aproveite para turbinar seus estudos com materiais completos e focados no que realmente cai na prova!'); 
-            showInitialReplies(); 
-        }
-
         window.onload = function() {
-            toggleStripedOptions(); 
-            updateFirstColumnStyles(); 
-            applyStyles();
-            startChatFlow();
-            notificationTimer = setTimeout(showNotification, 60000);
-            window.onclick = function(event) { if (event.target == document.getElementById('shareModal')) { closeShareModal(); } }
+            applyPreset('doceLavanda');
+            addMessage('Oi! Use o cupom <strong>LALAVEST</strong> no site <a href="https://discursivas.com" target="_blank">discursivas.com</a> para ganhar desconto nos cursos isolados!');
+            setTimeout(() => document.getElementById('chatNotification').classList.add('visible'), 2000);
         };
     </script>
 </body>
 </html>
+
 
 
 
